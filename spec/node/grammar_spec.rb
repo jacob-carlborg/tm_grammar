@@ -17,6 +17,22 @@ describe TmGrammar::Node::Grammar do
     end
   end
 
+  describe 'patterns' do
+    context 'when no patterns are defined' do
+      it 'returns an empty array' do
+        grammar.patterns.should == []
+      end
+    end
+  end
+
+  describe 'repository' do
+    context 'when no patterns in the repository are defined' do
+      it 'returns an empty hash' do
+        grammar.repository.should == {}
+      end
+    end
+  end
+
   describe 'file_types' do
     let(:file_types) { %w(foo bar) }
 

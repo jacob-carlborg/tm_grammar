@@ -11,6 +11,20 @@ module TmGrammar
       # @return [String] the scope name
       attr_reader :scope_name
 
+      # The patterns of the grammar.
+      #
+      # Corresponds to `patterns` key in the TextMate grammar syntax.
+      #
+      # @return [Array<Pattern>] the patterns
+      attr_reader :patterns
+
+      # The repository of the grammar.
+      #
+      # Corresponds to `repository` key in the TextMate grammar syntax.
+      #
+      # @return [{ String => Pattern }] the patterns in the repository
+      attr_reader :repository
+
       # Gets/sets the file types of the grammar.
       #
       # Corresponds to `fileTypes` key in the TextMate grammar syntax.
@@ -53,6 +67,8 @@ module TmGrammar
       #
       def initialize(scope_name)
         @scope_name = scope_name
+        @patterns = []
+        @repository = {}
       end
     end
   end
