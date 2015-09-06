@@ -36,7 +36,7 @@ module TmGrammar
     #
     # @return [void]
     def evaluate
-      context = Context.new
+      context = Context.new(node)
       context.instance_exec(&block)
     end
 
@@ -45,6 +45,7 @@ module TmGrammar
     attr_reader :block
 
     class Context
+      include TmGrammar::Dsl::Grammar
     end
   end
 end
