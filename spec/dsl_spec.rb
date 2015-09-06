@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe TmGrammar::Dsl do
   describe TmGrammar::Dsl::Grammar do
-    let(:grammar) { double(:grammar) }
-    let(:node) { double(:node) }
+    let(:grammar) { TmGrammar::Grammar.new('foo') {} }
+    let(:node) { grammar.node }
     subject { Class.new { include TmGrammar::Dsl::Grammar }.new(grammar, node) }
 
     describe 'initialize' do
@@ -17,8 +17,7 @@ describe TmGrammar::Dsl do
       let(:file_types) { %w(foo bar) }
 
       it 'sets the file types on the grammar node' do
-        node.should_receive(:file_types=).with(file_types)
-        subject.should_receive(:node).and_return(node)
+        node.should_receive(:file_types=).with(file_types).and_call_original
 
         subject.file_types(file_types)
       end
@@ -29,7 +28,7 @@ describe TmGrammar::Dsl do
 
       it 'sets the folding start marker on the grammar node' do
         node.should_receive(:folding_start_marker=).with(marker)
-        subject.should_receive(:node).and_return(node)
+          .and_call_original
 
         subject.folding_start_marker(marker)
       end
@@ -40,7 +39,7 @@ describe TmGrammar::Dsl do
 
       it 'sets the folding stop marker on the grammar node' do
         node.should_receive(:folding_stop_marker=).with(marker)
-        subject.should_receive(:node).and_return(node)
+          .and_call_original
 
         subject.folding_stop_marker(marker)
       end
@@ -52,7 +51,7 @@ describe TmGrammar::Dsl do
 
       it 'defines a pattern on the grammar' do
         grammar.should_receive(:define_pattern).with(name, block)
-        subject.should_receive(:grammar).and_return(grammar)
+          .and_call_original
 
         subject.pattern(name, &block)
       end
@@ -60,6 +59,7 @@ describe TmGrammar::Dsl do
       context 'when no name is given' do
         it 'defines a pattern on the grammar' do
           grammar.should_receive(:define_pattern).with(nil, block)
+            .and_call_original
 
           subject.pattern(&block)
         end
@@ -68,8 +68,8 @@ describe TmGrammar::Dsl do
   end
 
   describe TmGrammar::Dsl::Pattern do
-    let(:pattern_object) { double(:pattern_object) }
-    let(:node) { double(:node) }
+    let(:pattern_object) { TmGrammar::Pattern.new('foo', -> {}) }
+    let(:node) { pattern_object.node }
 
     subject do
       Class.new { include TmGrammar::Dsl::Pattern }.new(pattern_object, node)
@@ -86,7 +86,7 @@ describe TmGrammar::Dsl do
       let(:name) { 'foo' }
 
       it 'sets the name on the pattern node' do
-        node.should_receive(:name=).with(name)
+        node.should_receive(:name=).with(name).and_call_original
         subject.name(name)
       end
     end
@@ -95,7 +95,7 @@ describe TmGrammar::Dsl do
       let(:match) { /foo/ }
 
       it 'sets the match on the pattern node' do
-        node.should_receive(:match=).with(match)
+        node.should_receive(:match=).with(match).and_call_original
         subject.match(match)
       end
     end
@@ -104,7 +104,7 @@ describe TmGrammar::Dsl do
       let(:match) { /foo/ }
 
       it 'sets the begin match on the pattern node' do
-        node.should_receive(:begin=).with(match)
+        node.should_receive(:begin=).with(match).and_call_original
         subject.begin(match)
       end
     end
@@ -113,7 +113,7 @@ describe TmGrammar::Dsl do
       let(:match) { /foo/ }
 
       it 'sets the end match on the pattern node' do
-        node.should_receive(:end=).with(match)
+        node.should_receive(:end=).with(match).and_call_original
         subject.end(match)
       end
     end
@@ -122,7 +122,7 @@ describe TmGrammar::Dsl do
       let(:name) { 'foo' }
 
       it 'sets the content name on the pattern node' do
-        node.should_receive(:content_name=).with(name)
+        node.should_receive(:content_name=).with(name).and_call_original
         subject.content_name(name)
       end
     end
@@ -134,7 +134,9 @@ describe TmGrammar::Dsl do
 
       context 'when a name is given' do
         it 'defines a capture for the pattern' do
-          pattern_object.should_receive(:define_capture).with(key, name, nil)
+          pattern_object.should_receive(:define_capture)
+            .with(key, name, nil).and_call_original
+
           subject.capture(key, name)
         end
       end
@@ -143,6 +145,8 @@ describe TmGrammar::Dsl do
         it 'defines a capture for the pattern' do
           args = [key, nil, block]
           pattern_object.should_receive(:define_capture).with(*args)
+            .and_call_original
+
           subject.capture(key, &block)
         end
       end
@@ -151,6 +155,8 @@ describe TmGrammar::Dsl do
         it 'defines a capture for the pattern' do
           args = [key, name, block]
           pattern_object.should_receive(:define_capture).with(*args)
+            .and_call_original
+
           subject.capture(key, name, &block)
         end
       end
@@ -162,7 +168,7 @@ describe TmGrammar::Dsl do
 
       it 'defines a nested pattern on the pattern' do
         pattern_object.should_receive(:define_pattern).with(name, block)
-        subject.should_receive(:pattern_object).and_return(pattern_object)
+          .and_call_original
 
         subject.pattern(name, &block)
       end
@@ -172,7 +178,7 @@ describe TmGrammar::Dsl do
       let(:name) { 'foo' }
 
       it 'includes a grammar or rule in the pattern' do
-        node.should_receive(:include=).with(name)
+        node.should_receive(:include=).with(name).and_call_original
         subject.include(name)
       end
     end

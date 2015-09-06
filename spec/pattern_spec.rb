@@ -43,7 +43,8 @@ describe TmGrammar::Pattern do
       it 'defines a new capture' do
         capture = TmGrammar::Node::Capture
         node.should_receive(:add_capture)
-          .with(a_kind_of(Integer), an_instance_of(capture))
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
         pattern.define_capture(key, name)
       end
     end
@@ -52,7 +53,8 @@ describe TmGrammar::Pattern do
       it 'defines a new capture' do
         capture = TmGrammar::Node::Capture
         node.should_receive(:add_capture)
-          .with(a_kind_of(Integer), an_instance_of(capture))
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
         pattern.define_capture(key, nil, block)
       end
     end
@@ -61,7 +63,8 @@ describe TmGrammar::Pattern do
       it 'defines a new capture' do
         capture = TmGrammar::Node::Capture
         node.should_receive(:add_capture)
-          .with(a_kind_of(Integer), an_instance_of(capture))
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
         pattern.define_capture(key, name, block)
       end
     end
@@ -74,6 +77,8 @@ describe TmGrammar::Pattern do
     it 'defines a new pattern' do
       pattern = TmGrammar::Node::Pattern
       node.should_receive(:add_pattern).with(an_instance_of(pattern))
+        .and_call_original
+
       subject.define_pattern(name, block)
     end
   end

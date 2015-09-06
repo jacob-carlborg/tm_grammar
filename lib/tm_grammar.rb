@@ -7,6 +7,7 @@ module TmGrammar
 
   module Dsl
     autoload :Grammar, 'tm_grammar/dsl'
+    autoload :Pattern, 'tm_grammar/dsl'
   end
 
   module Node
