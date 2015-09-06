@@ -82,5 +82,50 @@ describe TmGrammar::Dsl do
         subject.pattern_object.should == pattern_object
       end
     end
+
+    describe 'name' do
+      let(:name) { 'foo' }
+
+      it 'sets the name on the pattern node' do
+        node.should_receive(:name=).with(name)
+        subject.name(name)
+      end
+    end
+
+    describe 'match' do
+      let(:match) { /foo/ }
+
+      it 'sets the match on the pattern node' do
+        node.should_receive(:match=).with(match)
+        subject.match(match)
+      end
+    end
+
+    describe 'begin' do
+      let(:match) { /foo/ }
+
+      it 'sets the begin match on the pattern node' do
+        node.should_receive(:begin=).with(match)
+        subject.begin(match)
+      end
+    end
+
+    describe 'end' do
+      let(:match) { /foo/ }
+
+      it 'sets the end match on the pattern node' do
+        node.should_receive(:end=).with(match)
+        subject.end(match)
+      end
+    end
+
+    describe 'content_name' do
+      let(:name) { 'foo' }
+
+      it 'sets the content name on the pattern node' do
+        node.should_receive(:content_name=).with(name)
+        subject.content_name(name)
+      end
+    end
   end
 end

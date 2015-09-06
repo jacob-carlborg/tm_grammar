@@ -109,6 +109,86 @@ module TmGrammar
         @pattern_object = pattern_object
         @node = node
       end
+
+      # Sets the name of the pattern.
+      #
+      # Corresponds to the `name` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.name 'foo'
+      #
+      # @param name [String] the name to set
+      def name(name)
+        node.name = name
+      end
+
+      # Sets the match of the pattern.
+      #
+      # Corresponds to the `match` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.match 'foo'
+      #
+      # @param match [String, Regexp] the match to set
+      def match(match)
+        node.match = match
+      end
+
+      # Sets the begin match of the pattern.
+      #
+      # Corresponds to the `begin` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.begin 'foo'
+      #
+      # @param match [String, Regexp] the match to set
+      def begin(match)
+        node.begin = match
+      end
+
+      # Sets the end match of the pattern.
+      #
+      # Corresponds to the `end` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.end 'foo'
+      #
+      # @param match [String, Regexp] the match to set
+      def end(match)
+        node.end = match
+      end
+
+      # Sets the content name of the pattern.
+      #
+      # Corresponds to the `contentName` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.content_name 'foo'
+      #
+      # @param name [String] the name to set
+      def content_name(name)
+        node.content_name = name
+      end
     end
   end
 end
