@@ -2,12 +2,14 @@ require 'spec_helper'
 
 describe TmGrammar::Dsl do
   describe TmGrammar::Dsl::Grammar do
+    let(:grammar) { double(:grammar) }
     let(:node) { double(:node) }
-    subject { Class.new { include TmGrammar::Dsl::Grammar }.new(node) }
+    subject { Class.new { include TmGrammar::Dsl::Grammar }.new(grammar, node) }
 
     describe 'initialize' do
-      it 'initialize the receiver with the given node' do
+      it 'initialize the receiver with the given grammar and node' do
         subject.node.should == node
+        subject.grammar.should == grammar
       end
     end
 
@@ -41,6 +43,27 @@ describe TmGrammar::Dsl do
         subject.should_receive(:node).and_return(node)
 
         subject.folding_stop_marker(marker)
+      end
+    end
+
+
+    describe 'pattern' do
+      let(:name) { 'foo' }
+      let(:block) { -> {} }
+
+      it 'defines a pattern on the grammar' do
+        grammar.should_receive(:define_pattern).with(name, block)
+        subject.should_receive(:grammar).and_return(grammar)
+
+        subject.pattern(name, &block)
+      end
+
+      context 'when no name is given' do
+        it 'defines a pattern on the grammar' do
+          grammar.should_receive(:define_pattern).with(nil, block)
+
+          subject.pattern(&block)
+        end
       end
     end
   end

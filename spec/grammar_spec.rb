@@ -4,6 +4,7 @@ describe TmGrammar::Grammar do
   let(:scope_name) { 'source.foo' }
   let(:block) { -> {} }
   let(:grammar) { TmGrammar::Grammar.new(scope_name, &block) }
+  let(:node) { grammar.node }
 
   subject { grammar }
 
@@ -31,6 +32,17 @@ describe TmGrammar::Grammar do
       grammar = TmGrammar::Grammar.new(scope_name, &block)
       grammar.evaluate
       context.should be_a(TmGrammar::Grammar::Context)
+    end
+  end
+
+  describe 'define_pattern' do
+    let(:name) { 'foo' }
+    let(:block) { -> {} }
+
+    it 'defines a new pattern' do
+      pattern = TmGrammar::Node::Pattern
+      node.should_receive(:add_pattern).with(an_instance_of(pattern))
+      grammar.define_pattern(name, block)
     end
   end
 end

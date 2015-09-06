@@ -1,17 +1,19 @@
 require 'spec_helper'
 
 describe TmGrammar::Node::Pattern do
-  let(:name) { 'keyword.control.foo' }
-  let(:pattern) { TmGrammar::Node::Pattern.new(name) }
+  let(:pattern) { TmGrammar::Node::Pattern.new }
 
   describe 'initialize' do
-    it 'initializes the object with the given name and block' do
-      pattern.name.should == name
+    it 'initializes the new object' do
+      pattern.should be_a(TmGrammar::Node::Pattern)
     end
   end
 
   describe 'name' do
-    it 'returns the name of the pattern' do
+    let(:name) { 'keyword.control.foo' }
+
+    it 'gets/sets the name of the pattern' do
+      pattern.name = name
       pattern.name.should == name
     end
   end

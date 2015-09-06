@@ -8,10 +8,9 @@ module TmGrammar
     # @return [TmGrammar::Node::Pattern] the pattern node
     attr_reader :node
 
-    def initialize(name, block)
-      @name = name
+    def initialize(block)
       @block = block
-      @node = TmGrammar::Node::Pattern.new(name)
+      @node = TmGrammar::Node::Pattern.new
     end
 
     # Evaluates the pattern.

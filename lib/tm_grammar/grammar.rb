@@ -36,8 +36,18 @@ module TmGrammar
     #
     # @return [void]
     def evaluate
-      context = Context.new(node)
+      context = Context.new(self, node)
       context.instance_exec(&block)
+    end
+
+    # Defines a new pattern on the grammar.
+    #
+    # @param name [String, nil] the name of the pattern
+    # @param block [Proc] the implementation of the pattern
+    def define_pattern(name, block)
+      pattern_node = TmGrammar::Pattern.new(block).evaluate
+      pattern_node.name = name
+      node.add_pattern(pattern_node)
     end
 
     private

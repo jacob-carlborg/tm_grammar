@@ -68,4 +68,13 @@ describe TmGrammar::Node::Grammar do
       grammar.first_line_match.should == match
     end
   end
+
+  describe 'add_pattern' do
+    let(:pattern) { TmGrammar::Node::Pattern.new }
+
+    it 'adds a pattern to the grammar' do
+      grammar.add_pattern(pattern)
+      grammar.patterns.should include(pattern)
+    end
+  end
 end

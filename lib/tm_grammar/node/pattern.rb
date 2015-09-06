@@ -5,12 +5,14 @@ module TmGrammar
     # Corresponds to an element in `patterns` attribute in the TextMate grammar
     # syntax.
     class Pattern
-      # The scope name of the pattern.
+      # Gets/sets the scope name of the pattern.
       #
       # Corresponds to `name` in the TextMate grammar syntax.
       #
+      # @param name [String] the name to set
+      #
       # @return [String] the scope name
-      attr_reader :name
+      attr_accessor :name
 
       # Gets/sets match for the pattern.
       #
@@ -47,10 +49,6 @@ module TmGrammar
       #
       # @return [String, Regexp] the set content name, or `nil` if not set
       attr_accessor :content_name
-
-      def initialize(name)
-        @name = name
-      end
     end
   end
 end

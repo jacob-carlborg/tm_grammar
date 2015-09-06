@@ -1,15 +1,22 @@
 module TmGrammar
   module Dsl
     module Grammar
+      # Returns the grammar.
+      #
+      # @return [TmGrammar:::Grammar] the grammar
+      attr_reader :grammar
+
       # Returns the grammar node.
       #
       # @return [TmGrammar::Node::Grammar] the grammar node
       attr_reader :node
 
-      # Initializes the receiver with the given grammar node.
+      # Initializes the receiver with the given grammar and grammar node.
       #
+      # @param grammar [TmGrammar::Grammar] the grammar
       # @param node [TmGrammar::Node::Grammar] the grammar node
-      def initialize(node)
+      def initialize(grammar, node)
+        @grammar = grammar
         @node = node
       end
 
@@ -78,7 +85,7 @@ module TmGrammar
       #
       # @param name [String] the name of the pattern
       # @param block [Proc] the implementation of the pattern
-      def pattern(name, &block)
+      def pattern(name = nil, &block)
         grammar.define_pattern(name, block)
       end
     end
