@@ -9,6 +9,7 @@ module TmGrammar
   end
 
   module Node
+    autoload :Capture, 'tm_grammar/node/capture'
     autoload :Grammar, 'tm_grammar/node/grammar'
     autoload :Pattern, 'tm_grammar/node/pattern'
   end
