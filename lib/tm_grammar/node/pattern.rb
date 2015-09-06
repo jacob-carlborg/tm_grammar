@@ -50,6 +50,15 @@ module TmGrammar
       # @return [String, Regexp] the set content name, or `nil` if not set
       attr_accessor :content_name
 
+      # Gets/sets include for the pattern.
+      #
+      # Corresponds to the `include` key in the TextMate grammar syntax.
+      #
+      # @param name [String, Regexp] the name of the include to set
+      #
+      # @return [String, Regexp] the set include name, or `nil` if not set
+      attr_accessor :include
+
       # The scope captures of the pattern.
       #
       # Corresponds to the `captures` key in the TextMate grammar syntax.

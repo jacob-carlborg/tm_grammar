@@ -246,6 +246,22 @@ module TmGrammar
       def pattern(name = nil, &block)
         pattern_object.define_pattern(name, block)
       end
+
+      # Sets the include of the pattern.
+      #
+      # Corresponds to the `include` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.include 'foo'
+      #
+      # @param name [String] the name to set
+      def include(name)
+        node.include = name
+      end
     end
   end
 end

@@ -75,4 +75,19 @@ describe TmGrammar::Node::Pattern do
       pattern.patterns.should include(node)
     end
   end
+
+  describe 'include' do
+    let(:name) { 'foo' }
+
+    it 'gets/sets the include of the pattern' do
+      pattern.include = name
+      pattern.include.should == name
+    end
+
+    context 'when the include has not been set' do
+      it 'returns nil' do
+        pattern.include.should be_nil
+      end
+    end
+  end
 end

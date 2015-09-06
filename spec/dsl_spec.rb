@@ -167,5 +167,14 @@ describe TmGrammar::Dsl do
         subject.pattern(name, &block)
       end
     end
+
+    describe 'include' do
+      let(:name) { 'foo' }
+
+      it 'includes a grammar or rule in the pattern' do
+        node.should_receive(:include=).with(name)
+        subject.include(name)
+      end
+    end
   end
 end
