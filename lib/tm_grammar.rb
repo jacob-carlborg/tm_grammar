@@ -2,6 +2,7 @@ require 'tm_grammar/version'
 
 module TmGrammar
   autoload :Grammar, 'tm_grammar/grammar'
+  autoload :Pattern, 'tm_grammar/pattern'
 
   module Dsl
     autoload :Grammar, 'tm_grammar/dsl'

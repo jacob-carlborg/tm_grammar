@@ -44,4 +44,20 @@ describe TmGrammar::Dsl do
       end
     end
   end
+
+  describe TmGrammar::Dsl::Pattern do
+    let(:pattern_object) { double(:pattern_object) }
+    let(:node) { double(:node) }
+
+    subject do
+      Class.new { include TmGrammar::Dsl::Pattern }.new(pattern_object, node)
+    end
+
+    describe 'initialize' do
+      it 'initialize the receiver with the given pattern object and node' do
+        subject.node.should == node
+        subject.pattern_object.should == pattern_object
+      end
+    end
+  end
 end
