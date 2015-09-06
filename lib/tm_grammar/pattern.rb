@@ -27,7 +27,7 @@ module TmGrammar
     #
     # @return [TmGrammar::Node::Pattern] a pattern node
     def evaluate
-      context = Context.new
+      context = Context.new(self, node)
       context.instance_exec(&block)
       node
     end
@@ -42,11 +42,22 @@ module TmGrammar
       node.add_capture(key, capture_node)
     end
 
+    # Defines a new nested pattern on the pattern.
+    #
+    # @param name [String, nil] the name of the pattern
+    # @param block [Proc] the implementation of the pattern
+    def define_pattern(name, block)
+      pattern_node = TmGrammar::Pattern.new(block).evaluate
+      pattern_node.name = name
+      node.add_pattern(pattern_node)
+    end
+
     private
 
     attr_reader :block
 
     class Context
+      include TmGrammar::Dsl::Pattern
     end
   end
 end

@@ -66,4 +66,15 @@ describe TmGrammar::Pattern do
       end
     end
   end
+
+  describe 'define_pattern' do
+    let(:name) { 'foo' }
+    let(:block) { -> {} }
+
+    it 'defines a new pattern' do
+      pattern = TmGrammar::Node::Pattern
+      node.should_receive(:add_pattern).with(an_instance_of(pattern))
+      subject.define_pattern(name, block)
+    end
+  end
 end

@@ -66,4 +66,13 @@ describe TmGrammar::Node::Pattern do
       pattern.captures.should include(1 => capture)
     end
   end
+
+  describe 'add_pattern' do
+    let(:node) { TmGrammar::Node::Pattern.new }
+
+    it 'adds a pattern to the grammar' do
+      pattern.add_pattern(node)
+      pattern.patterns.should include(node)
+    end
+  end
 end

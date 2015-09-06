@@ -155,5 +155,17 @@ describe TmGrammar::Dsl do
         end
       end
     end
+
+    describe 'pattern' do
+      let(:name) { 'foo' }
+      let(:block) { -> {} }
+
+      it 'defines a nested pattern on the pattern' do
+        pattern_object.should_receive(:define_pattern).with(name, block)
+        subject.should_receive(:pattern_object).and_return(pattern_object)
+
+        subject.pattern(name, &block)
+      end
+    end
   end
 end

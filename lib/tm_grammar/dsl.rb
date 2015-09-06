@@ -227,6 +227,25 @@ module TmGrammar
       def capture(key, name = nil, &block)
         pattern_object.define_capture(key, name, block)
       end
+
+      # Defines a new pattern.
+      #
+      # Corresponds to an element in the `patterns` key in the TextMate grammar
+      # syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.pattern 'foo' do
+      #   end
+      #
+      # @param name [String] the name of the pattern
+      # @param block [Proc] the implementation of the pattern
+      def pattern(name = nil, &block)
+        pattern_object.define_pattern(name, block)
+      end
     end
   end
 end

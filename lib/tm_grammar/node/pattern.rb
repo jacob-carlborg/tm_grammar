@@ -57,8 +57,16 @@ module TmGrammar
       # @return [<TmGrammar::Node::Captures>] the captures
       attr_reader :captures
 
+      # The nested patterns of the pattern.
+      #
+      # Corresponds to `patterns` key in the TextMate grammar syntax.
+      #
+      # @return [<Pattern>] the patterns
+      attr_reader :patterns
+
       def initialize
         @captures = {}
+        @patterns = []
       end
 
       # Adds a capture to the pattern.
@@ -69,6 +77,15 @@ module TmGrammar
       # @return [void]
       def add_capture(key, capture)
         @captures[key] = capture
+      end
+
+      # Adds a pattern to the pattern.
+      #
+      # @param pattern [TmGrammar::Node::Pattern] the pattern to add
+      #
+      # @return [void]
+      def add_pattern(pattern)
+        @patterns << pattern
       end
     end
   end
