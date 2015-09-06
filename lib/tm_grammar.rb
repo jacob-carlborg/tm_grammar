@@ -1,6 +1,7 @@
 require 'tm_grammar/version'
 
 module TmGrammar
+  autoload :Capture, 'tm_grammar/capture'
   autoload :Grammar, 'tm_grammar/grammar'
   autoload :Pattern, 'tm_grammar/pattern'
 
