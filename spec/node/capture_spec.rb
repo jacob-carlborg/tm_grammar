@@ -1,14 +1,11 @@
 require 'spec_helper'
 
 describe TmGrammar::Node::Capture do
-  let(:number) { 1 }
-  let(:name) { 'keyword.control.foo' }
-  let(:capture) { TmGrammar::Node::Capture.new(number, name) }
+  let(:capture) { TmGrammar::Node::Capture.new }
 
   describe 'initialize' do
-    it 'initializes the object with the given number and name' do
-      capture.number.should == number
-      capture.name.should == name
+    it 'initializes the object ' do
+      capture.should be_a(TmGrammar::Node::Capture)
     end
   end
 end

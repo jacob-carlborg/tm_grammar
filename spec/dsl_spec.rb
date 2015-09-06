@@ -46,7 +46,6 @@ describe TmGrammar::Dsl do
       end
     end
 
-
     describe 'pattern' do
       let(:name) { 'foo' }
       let(:block) { -> {} }
@@ -125,6 +124,35 @@ describe TmGrammar::Dsl do
       it 'sets the content name on the pattern node' do
         node.should_receive(:content_name=).with(name)
         subject.content_name(name)
+      end
+    end
+
+    describe 'capture' do
+      let(:key) { 1 }
+      let(:name) { 'foo' }
+      let(:block) { -> {} }
+
+      context 'when a name is given' do
+        it 'defines a capture for the pattern' do
+          pattern_object.should_receive(:define_capture).with(key, name, nil)
+          subject.capture(key, name)
+        end
+      end
+
+      context 'when a block is given' do
+        it 'defines a capture for the pattern' do
+          args = [key, nil, block]
+          pattern_object.should_receive(:define_capture).with(*args)
+          subject.capture(key, &block)
+        end
+      end
+
+      context 'when both a name and a block is given' do
+        it 'defines a capture for the pattern' do
+          args = [key, name, block]
+          pattern_object.should_receive(:define_capture).with(*args)
+          subject.capture(key, name, &block)
+        end
       end
     end
   end

@@ -33,4 +33,37 @@ describe TmGrammar::Pattern do
       pattern.evaluate.should be_a(TmGrammar::Node::Pattern)
     end
   end
+
+  describe 'define_capture' do
+    let(:key) { 1 }
+    let(:name) { 'foo' }
+    let(:blcok) { -> {} }
+
+    context 'when a name is given' do
+      it 'defines a new capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture))
+        pattern.define_capture(key, name)
+      end
+    end
+
+    context 'when a block is given' do
+      it 'defines a new capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture))
+        pattern.define_capture(key, nil, block)
+      end
+    end
+
+    context 'when both a name and a block is given' do
+      it 'defines a new capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture))
+        pattern.define_capture(key, name, block)
+      end
+    end
+  end
 end

@@ -7,6 +7,10 @@ describe TmGrammar::Node::Pattern do
     it 'initializes the new object' do
       pattern.should be_a(TmGrammar::Node::Pattern)
     end
+
+    it 'initializes the captures to an empty array' do
+      pattern.captures.should == {}
+    end
   end
 
   describe 'name' do
@@ -51,6 +55,15 @@ describe TmGrammar::Node::Pattern do
     it 'gets/sets the content name of the pattern' do
       pattern.content_name = name
       pattern.content_name.should == name
+    end
+  end
+
+  describe 'add_capture' do
+    let(:capture) { TmGrammar::Node::Capture.new }
+
+    it 'adds a capture to the pattern' do
+      pattern.add_capture(1, capture)
+      pattern.captures.should include(1 => capture)
     end
   end
 end

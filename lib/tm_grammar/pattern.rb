@@ -32,6 +32,16 @@ module TmGrammar
       node
     end
 
+    # Defines a new capture on the pattern.
+    #
+    # @param key [key] the key of the capture
+    # @param name [String] the name of the capture
+    # @param block [Proc] the implementation of the capture
+    def define_capture(key, name = nil, block = nil)
+      capture_node = TmGrammar::Capture.new(name, block).evaluate
+      node.add_capture(key, capture_node)
+    end
+
     private
 
     attr_reader :block

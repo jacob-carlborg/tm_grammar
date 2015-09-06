@@ -49,6 +49,27 @@ module TmGrammar
       #
       # @return [String, Regexp] the set content name, or `nil` if not set
       attr_accessor :content_name
+
+      # The scope captures of the pattern.
+      #
+      # Corresponds to the `captures` key in the TextMate grammar syntax.
+      #
+      # @return [<TmGrammar::Node::Captures>] the captures
+      attr_reader :captures
+
+      def initialize
+        @captures = {}
+      end
+
+      # Adds a capture to the pattern.
+      #
+      # @param key [Integer] the key of the capture
+      # @param pattern [TmGrammar::Node::Capture] the capture to add
+      #
+      # @return [void]
+      def add_capture(key, capture)
+        @captures[key] = capture
+      end
     end
   end
 end

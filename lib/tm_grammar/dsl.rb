@@ -189,6 +189,44 @@ module TmGrammar
       def content_name(name)
         node.content_name = name
       end
+
+      # Defines a capture for the pattern.
+      #
+      # Corresponds to an element in the `captures` key in the TextMate grammar
+      # syntax.
+      #
+      # @example Capture with name
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.capture 1, 'foo'
+      #
+      # @example Capture with block
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.capture 1 do
+      #   end
+      #
+      # @example Capture with name and block
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.capture 1, 'foo' do
+      #   end
+      #
+      # @param key [Integer] the key of the capture
+      #
+      # @param name [String] the name of the capture. Corresponds to the `name`
+      #   key inside the capture value in the TextMate grammar syntax.
+      #
+      # @param block [Proc] the implementation of the capture
+      def capture(key, name = nil, &block)
+        pattern_object.define_capture(key, name, block)
+      end
     end
   end
 end
