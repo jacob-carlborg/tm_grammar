@@ -228,6 +228,84 @@ module TmGrammar
         pattern_object.define_capture(key, name, block)
       end
 
+      # Defines a begin capture for the pattern.
+      #
+      # Corresponds to an element in the `beginCaptures` key in the TextMate
+      # grammar syntax.
+      #
+      # @example Begin capture with name
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.begin_capture 1, 'foo'
+      #
+      # @example Begin capture with block
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.begin_capture 1 do
+      #   end
+      #
+      # @example Begin capture with name and block
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.begin_capture 1, 'foo' do
+      #   end
+      #
+      # @param key [Integer] the key of the capture
+      #
+      # @param name [String] the name of the begin capture. Corresponds to the
+      #   `beginCapture` key inside the capture value in the TextMate grammar
+      #   syntax.
+      #
+      # @param block [Proc] the implementation of the capture
+      def begin_capture(key, name = nil, &block)
+        pattern_object.define_begin_capture(key, name, block)
+      end
+
+      # Defines a end capture for the pattern.
+      #
+      # Corresponds to an element in the `endCaptures` key in the TextMate
+      # grammar syntax.
+      #
+      # @example End capture with name
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.end_capture 1, 'foo'
+      #
+      # @example End capture with block
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.end_capture 1 do
+      #   end
+      #
+      # @example End capture with name and block
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.end_capture 1, 'foo' do
+      #   end
+      #
+      # @param key [Integer] the key of the capture
+      #
+      # @param name [String] the name of the end capture. Corresponds to the
+      #   `endCapture` key inside the capture value in the TextMate grammar
+      #   syntax.
+      #
+      # @param block [Proc] the implementation of the capture
+      def end_capture(key, name = nil, &block)
+        pattern_object.define_end_capture(key, name, block)
+      end
+
       # Defines a new pattern.
       #
       # Corresponds to an element in the `patterns` key in the TextMate grammar

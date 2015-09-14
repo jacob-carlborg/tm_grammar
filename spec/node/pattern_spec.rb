@@ -67,6 +67,26 @@ describe TmGrammar::Node::Pattern do
     end
   end
 
+  describe 'add_begin_capture' do
+    let(:key) { 1 }
+    let(:capture) { TmGrammar::Node::Capture.new }
+
+    it 'adds a capture to the pattern' do
+      pattern.add_begin_capture(key, capture)
+      pattern.begin_captures.should include(key => capture)
+    end
+  end
+
+  describe 'add_end_capture' do
+    let(:key) { 1 }
+    let(:capture) { TmGrammar::Node::Capture.new }
+
+    it 'adds a capture to the pattern' do
+      pattern.add_end_capture(key, capture)
+      pattern.end_captures.should include(key => capture)
+    end
+  end
+
   describe 'add_pattern' do
     let(:node) { TmGrammar::Node::Pattern.new }
 

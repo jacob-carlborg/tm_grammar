@@ -182,5 +182,75 @@ describe TmGrammar::Dsl do
         subject.include(name)
       end
     end
+
+    describe 'begin_capture' do
+      let(:number) { 1 }
+      let(:name) { 'foo' }
+      let(:block) { -> {} }
+
+      context 'when a name is given' do
+        it 'defines a begin capture for the pattern' do
+          pattern_object.should_receive(:define_begin_capture)
+            .with(number, name, nil).and_call_original
+
+          subject.begin_capture(number, name)
+        end
+      end
+
+      context 'when a block is given' do
+        it 'defines a capture for the pattern' do
+          args = [number, nil, block]
+          pattern_object.should_receive(:define_begin_capture).with(*args)
+            .and_call_original
+
+          subject.begin_capture(number, &block)
+        end
+      end
+
+      context 'when both a name and a block is given' do
+        it 'defines a capture for the pattern' do
+          args = [number, name, block]
+          pattern_object.should_receive(:define_begin_capture).with(*args)
+            .and_call_original
+
+          subject.begin_capture(number, name, &block)
+        end
+      end
+    end
+
+    describe 'end_capture' do
+      let(:number) { 1 }
+      let(:name) { 'foo' }
+      let(:block) { -> {} }
+
+      context 'when a name is given' do
+        it 'defines a end capture for the pattern' do
+          pattern_object.should_receive(:define_end_capture)
+            .with(number, name, nil).and_call_original
+
+          subject.end_capture(number, name)
+        end
+      end
+
+      context 'when a block is given' do
+        it 'defines a capture for the pattern' do
+          args = [number, nil, block]
+          pattern_object.should_receive(:define_end_capture).with(*args)
+            .and_call_original
+
+          subject.end_capture(number, &block)
+        end
+      end
+
+      context 'when both a name and a block is given' do
+        it 'defines a capture for the pattern' do
+          args = [number, name, block]
+          pattern_object.should_receive(:define_end_capture).with(*args)
+            .and_call_original
+
+          subject.end_capture(number, name, &block)
+        end
+      end
+    end
   end
 end

@@ -42,6 +42,26 @@ module TmGrammar
       node.add_capture(key, capture_node)
     end
 
+    # Defines a new begin capture on the pattern.
+    #
+    # @param key [Integer] the key of the capture
+    # @param name [String] the name of the capture
+    # @param block [Proc] the implementation of the capture
+    def define_begin_capture(key, name = nil, block = nil)
+      capture_node = TmGrammar::Capture.new(name, block).evaluate
+      node.add_begin_capture(key, capture_node)
+    end
+
+    # Defines a new end capture on the pattern.
+    #
+    # @param key [Integer] the key of the capture
+    # @param name [String] the name of the capture
+    # @param block [Proc] the implementation of the capture
+    def define_end_capture(key, name = nil, block = nil)
+      capture_node = TmGrammar::Capture.new(name, block).evaluate
+      node.add_end_capture(key, capture_node)
+    end
+
     # Defines a new nested pattern on the pattern.
     #
     # @param name [String, nil] the name of the pattern

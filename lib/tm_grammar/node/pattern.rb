@@ -66,6 +66,20 @@ module TmGrammar
       # @return [<TmGrammar::Node::Captures>] the captures
       attr_reader :captures
 
+      # The scope begin captures of the pattern.
+      #
+      # Corresponds to the `beginCaptures` key in the TextMate grammar syntax.
+      #
+      # @return [<TmGrammar::Node::Capture>] the captures
+      attr_reader :begin_captures
+
+      # The scope end captures of the pattern.
+      #
+      # Corresponds to the `endCaptures` key in the TextMate grammar syntax.
+      #
+      # @return [<TmGrammar::Node::Capture>] the captures
+      attr_reader :end_captures
+
       # The nested patterns of the pattern.
       #
       # Corresponds to `patterns` key in the TextMate grammar syntax.
@@ -75,6 +89,8 @@ module TmGrammar
 
       def initialize
         @captures = {}
+        @begin_captures = {}
+        @end_captures = {}
         @patterns = []
       end
 
@@ -86,6 +102,26 @@ module TmGrammar
       # @return [void]
       def add_capture(key, capture)
         @captures[key] = capture
+      end
+
+      # Adds a begin capture to the pattern.
+      #
+      # @param key [Integer] the key of the begin capture
+      # @param pattern [TmGrammar::Node::Capture] the capture to add
+      #
+      # @return [void]
+      def add_begin_capture(key, capture)
+        @begin_captures[key] = capture
+      end
+
+      # Adds a end capture to the pattern.
+      #
+      # @param key [Integer] the key of the end capture
+      # @param pattern [TmGrammar::Node::Capture] the capture to add
+      #
+      # @return [void]
+      def add_end_capture(key, capture)
+        @end_captures[key] = capture
       end
 
       # Adds a pattern to the pattern.

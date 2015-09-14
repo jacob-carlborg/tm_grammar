@@ -70,6 +70,78 @@ describe TmGrammar::Pattern do
     end
   end
 
+  describe 'define_begin_capture' do
+    let(:key) { 1 }
+    let(:name) { 'foo' }
+    let(:blcok) { -> {} }
+
+    context 'when a name is given' do
+      it 'defines a new begin capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_begin_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
+        pattern.define_begin_capture(key, name)
+      end
+    end
+
+    context 'when a block is given' do
+      it 'defines a new begin capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_begin_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
+        pattern.define_begin_capture(key, nil, block)
+      end
+    end
+
+    context 'when both a name and a block is given' do
+      it 'defines a new begin capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_begin_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
+        pattern.define_begin_capture(key, name, block)
+      end
+    end
+  end
+
+  describe 'define_end_capture' do
+    let(:key) { 1 }
+    let(:name) { 'foo' }
+    let(:blcok) { -> {} }
+
+    context 'when a name is given' do
+      it 'defines a new end capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_end_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
+        pattern.define_end_capture(key, name)
+      end
+    end
+
+    context 'when a block is given' do
+      it 'defines a new end capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_end_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
+        pattern.define_end_capture(key, nil, block)
+      end
+    end
+
+    context 'when both a name and a block is given' do
+      it 'defines a new end capture' do
+        capture = TmGrammar::Node::Capture
+        node.should_receive(:add_end_capture)
+          .with(a_kind_of(Integer), an_instance_of(capture)).and_call_original
+
+        pattern.define_end_capture(key, name, block)
+      end
+    end
+  end
+
   describe 'define_pattern' do
     let(:name) { 'foo' }
     let(:block) { -> {} }
