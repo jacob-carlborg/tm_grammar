@@ -1,3 +1,5 @@
+require 'stringio'
+
 require 'tm_grammar/version'
 
 module TmGrammar
@@ -14,5 +16,9 @@ module TmGrammar
     autoload :Capture, 'tm_grammar/node/capture'
     autoload :Grammar, 'tm_grammar/node/grammar'
     autoload :Pattern, 'tm_grammar/node/pattern'
+  end
+
+  module Util
+    autoload :Buffer, 'tm_grammar/util/buffer'
   end
 end
