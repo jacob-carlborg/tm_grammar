@@ -295,6 +295,114 @@ grammar
           end
         end
       end
+
+      context 'when the pattern has begin captures' do
+        let(:key) { 1 }
+        let(:begin_capture_name) { 'storage.type.objc' }
+        let(:begin_capture) { TmGrammar::Node::Capture.new }
+
+        before :each do
+          node.begin_captures[key] = begin_capture
+        end
+
+        context 'when there is one begin capture' do
+          it 'generates a TextMate pattern with begin captures' do
+            begin_capture.name = begin_capture_name
+
+            result = <<-grammar
+{
+  name = '#{name}';
+  beginCaptures = {
+    #{key} = {
+      name = '#{begin_capture_name}';
+    };
+  };
+}
+grammar
+            generate.should == result.strip
+          end
+        end
+
+        context 'when there are multiple begin captures' do
+          let(:second_key) { 3 }
+
+          it 'generates a TextMate pattern with begin captures' do
+            begin_capture.name = begin_capture_name
+            second_begin_capture = TmGrammar::Node::Capture.new
+            second_begin_capture.name = begin_capture_name
+            node.begin_captures[second_key] = second_begin_capture
+
+            result = <<-grammar
+{
+  name = '#{name}';
+  beginCaptures = {
+    #{key} = {
+      name = '#{begin_capture_name}';
+    };
+    #{second_key} = {
+      name = '#{begin_capture_name}';
+    };
+  };
+}
+grammar
+            generate.should == result.strip
+          end
+        end
+      end
+
+      context 'when the pattern has end captures' do
+        let(:key) { 1 }
+        let(:end_capture_name) { 'storage.type.objc' }
+        let(:end_capture) { TmGrammar::Node::Capture.new }
+
+        before :each do
+          node.end_captures[key] = end_capture
+        end
+
+        context 'when there is one end capture' do
+          it 'generates a TextMate pattern with end captures' do
+            end_capture.name = end_capture_name
+
+            result = <<-grammar
+{
+  name = '#{name}';
+  endCaptures = {
+    #{key} = {
+      name = '#{end_capture_name}';
+    };
+  };
+}
+grammar
+            generate.should == result.strip
+          end
+        end
+
+        context 'when there are multiple end captures' do
+          let(:second_key) { 3 }
+
+          it 'generates a TextMate pattern with end captures' do
+            end_capture.name = end_capture_name
+            second_end_capture = TmGrammar::Node::Capture.new
+            second_end_capture.name = end_capture_name
+            node.end_captures[second_key] = second_end_capture
+
+            result = <<-grammar
+{
+  name = '#{name}';
+  endCaptures = {
+    #{key} = {
+      name = '#{end_capture_name}';
+    };
+    #{second_key} = {
+      name = '#{end_capture_name}';
+    };
+  };
+}
+grammar
+            generate.should == result.strip
+          end
+        end
+      end
     end
 
     context 'capture' do

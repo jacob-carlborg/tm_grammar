@@ -47,6 +47,8 @@ module TmGrammar
           append_single('contentName', pattern.content_name)
           append_single('include', pattern.include)
           append_dictionary('captures', pattern.captures)
+          append_dictionary('beginCaptures', pattern.begin_captures)
+          append_dictionary('endCaptures', pattern.end_captures)
           append_array('patterns', pattern.patterns)
         end
 
