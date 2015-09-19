@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   if spec.respond_to?(:metadata)
     spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
   else
-    fail 'RubyGems 2.0 or newer is required to protect against public gem '\
+    raise 'RubyGems 2.0 or newer is required to protect against public gem '\
       'pushes.'
   end
 
@@ -29,6 +29,9 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
+
+  spec.add_dependency 'activesupport', '~> 4.2.4'
+  spec.add_dependency 'pattern-match', '~> 1.0.1'
 
   spec.add_development_dependency 'bundler', '~> 1.10.5'
   spec.add_development_dependency 'pry', '~> 0.10.1'

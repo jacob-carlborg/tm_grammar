@@ -1,5 +1,8 @@
 require 'stringio'
 
+require 'active_support/core_ext/object/blank'
+require 'pattern-match'
+
 require 'tm_grammar/version'
 
 module TmGrammar
@@ -10,6 +13,10 @@ module TmGrammar
   module Dsl
     autoload :Grammar, 'tm_grammar/dsl'
     autoload :Pattern, 'tm_grammar/dsl'
+  end
+
+  module Generator
+    autoload :TextMateGrammar, 'tm_grammar/generator/text_mate_grammar'
   end
 
   module Node
