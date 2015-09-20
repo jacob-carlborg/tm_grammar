@@ -17,7 +17,7 @@ module TmGrammar
     #
     # @param scope_name [String] the scope name of the grammar
     # @param block [Proc] the implementation of the grammar
-    def initialize(scope_name, &block)
+    def initialize(scope_name, block)
       @node = TmGrammar::Node::Grammar.new(scope_name)
       @block = block
     end
@@ -34,10 +34,11 @@ module TmGrammar
     #   grammar.evaluate
     #   puts i # => 1
     #
-    # @return [void]
+    # @return [TmGrammar::Node::Grammar] the grammar node
     def evaluate
       context = Context.new(self, node)
       context.instance_exec(&block)
+      node
     end
 
     # Defines a new pattern on the grammar.

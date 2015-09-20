@@ -8,9 +8,11 @@ require 'tm_grammar/version'
 module TmGrammar
   autoload :Capture, 'tm_grammar/capture'
   autoload :Grammar, 'tm_grammar/grammar'
+  autoload :Parser, 'tm_grammar/parser'
   autoload :Pattern, 'tm_grammar/pattern'
 
   module Dsl
+    autoload :Global, 'tm_grammar/dsl'
     autoload :Grammar, 'tm_grammar/dsl'
     autoload :Pattern, 'tm_grammar/dsl'
   end

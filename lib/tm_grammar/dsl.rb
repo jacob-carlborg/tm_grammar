@@ -1,5 +1,11 @@
 module TmGrammar
   module Dsl
+    module Global
+      def grammar(scope_name, &block)
+        TmGrammar::Grammar.new(scope_name, block).evaluate
+      end
+    end
+
     module Grammar
       # Returns the grammar.
       #

@@ -1,8 +1,24 @@
 require 'spec_helper'
 
 describe TmGrammar::Dsl do
+  describe TmGrammar::Dsl::Global do
+    subject { Class.new { include TmGrammar::Dsl::Global }.new }
+
+    describe 'grammar' do
+      let(:scope_name) { 'source.foo' }
+      let(:block) { -> {} }
+
+      it 'defines a grammar' do
+        TmGrammar::Grammar.should_receive(:new).with(scope_name, block)
+          .and_call_original
+
+        subject.grammar(scope_name, &block)
+      end
+    end
+  end
+
   describe TmGrammar::Dsl::Grammar do
-    let(:grammar) { TmGrammar::Grammar.new('foo') {} }
+    let(:grammar) { TmGrammar::Grammar.new('foo', -> {})  }
     let(:node) { grammar.node }
     subject { Class.new { include TmGrammar::Dsl::Grammar }.new(grammar, node) }
 

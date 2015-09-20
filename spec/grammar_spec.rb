@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe TmGrammar::Grammar do
   let(:scope_name) { 'source.foo' }
-  let(:block) { -> {} }
-  let(:grammar) { TmGrammar::Grammar.new(scope_name, &block) }
+  let(:grammar) { TmGrammar::Grammar.new(scope_name, -> {}) }
   let(:node) { grammar.node }
 
   subject { grammar }
@@ -21,15 +20,13 @@ describe TmGrammar::Grammar do
   describe 'evaluate' do
     it 'evaluates the grammar block' do
       i = 0
-      block = -> { i += 1 }
-      grammar = TmGrammar::Grammar.new(scope_name, &block)
+      grammar = TmGrammar::Grammar.new(scope_name, -> { i += 1 })
       -> { grammar.evaluate }.should change { i }.by(1)
     end
 
     it 'evaluates the grammar in a grammar context' do
       context = nil
-      block = -> { context = self }
-      grammar = TmGrammar::Grammar.new(scope_name, &block)
+      grammar = TmGrammar::Grammar.new(scope_name, -> { context = self })
       grammar.evaluate
       context.should be_a(TmGrammar::Grammar::Context)
     end
@@ -50,7 +47,7 @@ describe TmGrammar::Grammar do
 
   describe 'define_rule' do
     let(:name) { 'foo' }
-    let(:blcok) { -> {} }
+    let(:block) { -> {} }
 
     it 'defines a rule in the repository' do
       pattern = TmGrammar::Node::Pattern
