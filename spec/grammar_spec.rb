@@ -47,4 +47,17 @@ describe TmGrammar::Grammar do
       grammar.define_pattern(name, block)
     end
   end
+
+  describe 'define_rule' do
+    let(:name) { 'foo' }
+    let(:blcok) { -> {} }
+
+    it 'defines a rule in the repository' do
+      pattern = TmGrammar::Node::Pattern
+      node.should_receive(:add_rule)
+        .with(a_kind_of(String), an_instance_of(pattern)).and_call_original
+
+      grammar.define_rule(name, block)
+    end
+  end
 end

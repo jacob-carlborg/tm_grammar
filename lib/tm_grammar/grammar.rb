@@ -50,6 +50,15 @@ module TmGrammar
       node.add_pattern(pattern_node)
     end
 
+    # Defines a new rule in the repository on the grammar.
+    #
+    # @param name [String] the name of the rule
+    # @param block [Proc] the implementation of the rule
+    def define_rule(name, block)
+      pattern_node = TmGrammar::Pattern.new(block).evaluate
+      node.add_rule(name, pattern_node)
+    end
+
     private
 
     attr_reader :block

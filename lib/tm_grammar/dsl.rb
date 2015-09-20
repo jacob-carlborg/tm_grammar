@@ -88,6 +88,25 @@ module TmGrammar
       def pattern(name = nil, &block)
         grammar.define_pattern(name, block)
       end
+
+      # Defines a new rule in the repository.
+      #
+      # Corresponds to an element in the `repository` key in the TextMate
+      # grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Grammar
+      #   end
+      #
+      #   Foo.new.rule 'foo' do
+      #   end
+      #
+      # @param name [String] the name of the rule
+      # @param block [Proc] the implementation of the rule
+      def rule(name, &block)
+        grammar.define_rule(name, block)
+      end
     end
 
     module Pattern

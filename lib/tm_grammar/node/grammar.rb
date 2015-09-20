@@ -79,6 +79,16 @@ module TmGrammar
       def add_pattern(pattern)
         @patterns << pattern
       end
+
+      # Adds a rule to the repository on the grammar.
+      #
+      # @param name [String] the name of the rule
+      # @param pattern [TmGrammar::Node::Rule] the rule to add
+      #
+      # @return [void]
+      def add_rule(name, rule)
+        @repository[name] = rule
+      end
     end
   end
 end

@@ -115,6 +115,59 @@ grammar
           end
         end
       end
+
+      context 'when the grammar has a repository' do
+        let(:name) { 'variable' }
+        let(:match) { '\$[a-zA-Z0-9_]+' }
+        let(:pattern) { TmGrammar::Node::Pattern.new }
+
+        before :each do
+          pattern.match = match
+          node.repository[name] = pattern
+        end
+
+        context 'when there is one rule in the repository' do
+          it 'generates a TextMate grammar with a repository' do
+            result = <<-grammar
+{
+  scopeName = '#{scope_name}';
+  repository = {
+    #{name} = {
+      match = '#{match}';
+    };
+  };
+}
+grammar
+            generate.should == result.strip
+          end
+        end
+
+        context 'when there are multiple rules' do
+          let(:second_name) { 'escaped-char' }
+          let(:second_match) { '\\.' }
+
+          it 'generates a TextMate grammar with rules' do
+            second_pattern = TmGrammar::Node::Pattern.new
+            second_pattern.match = second_match
+            node.repository[second_name] = second_pattern
+
+            result = <<-grammar
+{
+  scopeName = '#{scope_name}';
+  repository = {
+    #{name} = {
+      match = '#{match}';
+    };
+    #{second_name} = {
+      match = '#{second_match}';
+    };
+  };
+}
+grammar
+            generate.should == result.strip
+          end
+        end
+      end
     end
 
     context 'pattern' do
@@ -196,14 +249,16 @@ grammar
 
       context 'when the pattern has nested patterns' do
         let(:nested_name) { 'keyword.control.foo' }
+        let(:pattern) { TmGrammar::Node::Pattern.new }
+
+        before :each do
+          pattern.name = nested_name
+          pattern.begin = '"'
+          node.patterns << pattern
+        end
 
         context 'when there is one nested pattern' do
           it 'generates a TextMate pattern with nested patterns' do
-            pattern = TmGrammar::Node::Pattern.new
-            pattern.name = nested_name
-            pattern.begin = '"'
-            node.patterns << pattern
-
             result = <<-grammar
 {
   patterns = (
@@ -220,10 +275,7 @@ grammar
 
         context 'when there are multiple nested patterns' do
           it 'generates a TextMate pattern with nested patterns' do
-            pattern = TmGrammar::Node::Pattern.new
-            pattern.name = nested_name
-            pattern.begin = '"'
-            node.patterns << pattern << pattern
+            node.patterns << pattern
 
             result = <<-grammar
 {
@@ -311,7 +363,6 @@ grammar
 
             result = <<-grammar
 {
-  name = '#{name}';
   beginCaptures = {
     #{key} = {
       name = '#{begin_capture_name}';
@@ -334,7 +385,6 @@ grammar
 
             result = <<-grammar
 {
-  name = '#{name}';
   beginCaptures = {
     #{key} = {
       name = '#{begin_capture_name}';
@@ -365,7 +415,6 @@ grammar
 
             result = <<-grammar
 {
-  name = '#{name}';
   endCaptures = {
     #{key} = {
       name = '#{end_capture_name}';
@@ -388,7 +437,6 @@ grammar
 
             result = <<-grammar
 {
-  name = '#{name}';
   endCaptures = {
     #{key} = {
       name = '#{end_capture_name}';

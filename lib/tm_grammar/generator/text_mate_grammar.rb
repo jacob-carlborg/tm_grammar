@@ -30,6 +30,7 @@ module TmGrammar
           append_single('foldingStopMarker', grammar.folding_stop_marker)
           append_single('firstLineMatch', grammar.first_line_match)
           append_array('patterns', grammar.patterns)
+          append_dictionary('repository', grammar.repository)
         end
 
         buffer.append('}')

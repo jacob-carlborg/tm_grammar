@@ -4,7 +4,7 @@ describe TmGrammar::Node::Pattern do
   let(:pattern) { TmGrammar::Node::Pattern.new }
 
   describe 'initialize' do
-    it 'initializes the new object' do
+    it 'initializes a new pattern node' do
       pattern.should be_a(TmGrammar::Node::Pattern)
     end
 

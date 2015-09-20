@@ -65,10 +65,22 @@ describe TmGrammar::Dsl do
         end
       end
     end
+
+    describe 'rule' do
+      let(:name) { 'foo' }
+      let(:block) { -> {} }
+
+      it 'defines a rule in the repository' do
+        grammar.should_receive(:define_rule).with(name, block)
+          .and_call_original
+
+        subject.rule(name, &block)
+      end
+    end
   end
 
   describe TmGrammar::Dsl::Pattern do
-    let(:pattern_object) { TmGrammar::Pattern.new('foo', -> {}) }
+    let(:pattern_object) { TmGrammar::Pattern.new(-> {}) }
     let(:node) { pattern_object.node }
 
     subject do

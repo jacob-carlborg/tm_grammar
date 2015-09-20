@@ -77,4 +77,14 @@ describe TmGrammar::Node::Grammar do
       grammar.patterns.should include(pattern)
     end
   end
+
+  describe 'add_rule' do
+    let(:name) { 'foo' }
+    let(:pattern) { TmGrammar::Node::Pattern.new }
+
+    it 'adds a rule to the repository on the grammar' do
+      grammar.add_rule(name, pattern)
+      grammar.repository.should == { name => pattern }
+    end
+  end
 end
