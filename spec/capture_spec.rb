@@ -38,4 +38,17 @@ describe TmGrammar::Capture do
       capture.evaluate.should be_a(TmGrammar::Node::Capture)
     end
   end
+
+  describe 'define_pattern' do
+    let(:name) { 'foo' }
+    let(:block) { -> {} }
+
+    it 'defines a new pattern' do
+      pattern = TmGrammar::Node::Pattern
+      node.should_receive(:add_pattern).with(an_instance_of(pattern))
+        .and_call_original
+
+      capture.define_pattern(name, block)
+    end
+  end
 end

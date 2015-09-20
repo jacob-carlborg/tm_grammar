@@ -467,6 +467,56 @@ grammar
           generate.should == result.strip
         end
       end
+
+      context 'when the capture has patterns' do
+        let(:pattern_name) { 'keyword.control.foo' }
+
+        context 'when there is one pattern' do
+          it 'generates a TextMate capture with patterns' do
+            pattern = TmGrammar::Node::Pattern.new
+            pattern.name = pattern_name
+            pattern.begin = '"'
+            node.patterns << pattern
+
+            result = <<-capture
+{
+  patterns = (
+    {
+      name = '#{pattern_name}';
+      begin = '#{pattern.begin}';
+    }
+  );
+}
+capture
+            generate.should == result.strip
+          end
+        end
+
+        context 'when there are multiple patterns' do
+          it 'generates a TextMate capture with patterns' do
+            pattern = TmGrammar::Node::Pattern.new
+            pattern.name = pattern_name
+            pattern.begin = '"'
+            node.patterns << pattern << pattern
+
+            result = <<-capture
+{
+  patterns = (
+    {
+      name = '#{pattern_name}';
+      begin = '#{pattern.begin}';
+    },
+    {
+      name = '#{pattern_name}';
+      begin = '#{pattern.begin}';
+    }
+  );
+}
+capture
+            generate.should == result.strip
+          end
+        end
+      end
     end
   end
 end

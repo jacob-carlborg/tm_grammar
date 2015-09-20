@@ -366,5 +366,45 @@ module TmGrammar
         node.include = name
       end
     end
+
+    module Capture
+      # Returns the capture.
+      #
+      # @return [TmCapture:::Capture] the capture
+      attr_reader :capture
+
+      # Returns the capture node.
+      #
+      # @return [TmCapture::Node::Capture] the capture node
+      attr_reader :node
+
+      # Initializes the receiver with the given capture and capture node.
+      #
+      # @param capture [TmCapture::Capture] the capture
+      # @param node [TmCapture::Node::Capture] the capture node
+      def initialize(capture, node)
+        @capture = capture
+        @node = node
+      end
+
+      # Defines a new pattern.
+      #
+      # Corresponds to an element in the `patterns` dictionary in the TextMate
+      # grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Capture
+      #   end
+      #
+      #   Foo.new.pattern 'foo' do
+      #   end
+      #
+      # @param name [String] the name of the pattern
+      # @param block [Proc] the implementation of the pattern
+      def pattern(name = nil, &block)
+        capture.define_pattern(name, block)
+      end
+    end
   end
 end

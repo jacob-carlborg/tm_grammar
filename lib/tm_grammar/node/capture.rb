@@ -11,6 +11,26 @@ module TmGrammar
       #
       # @return [String] the scope name
       attr_accessor :name
+
+      # The patterns of the capture.
+      #
+      # Corresponds to `patterns` dictionary in the TextMate grammar syntax.
+      #
+      # @return [Array<Pattern>] the patterns
+      attr_reader :patterns
+
+      def initialize
+        @patterns = []
+      end
+
+      # Adds a pattern to the grammar.
+      #
+      # @param pattern [TmGrammar::Node::Pattern] the pattern to add
+      #
+      # @return [void]
+      def add_pattern(pattern)
+        @patterns << pattern
+      end
     end
   end
 end

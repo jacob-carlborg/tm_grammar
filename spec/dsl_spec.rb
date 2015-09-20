@@ -281,4 +281,31 @@ describe TmGrammar::Dsl do
       end
     end
   end
+
+  describe TmGrammar::Dsl::Capture do
+    let(:capture) { TmGrammar::Capture.new('foo', -> {})  }
+    let(:node) { capture.node }
+    subject { Class.new { include TmGrammar::Dsl::Capture }.new(capture, node) }
+
+    describe 'pattern' do
+      let(:name) { 'foo' }
+      let(:block) { -> {} }
+
+      it 'defines a pattern on the capture' do
+        capture.should_receive(:define_pattern).with(name, block)
+          .and_call_original
+
+        subject.pattern(name, &block)
+      end
+
+      context 'when no name is given' do
+        it 'defines a pattern on the capture' do
+          capture.should_receive(:define_pattern).with(nil, block)
+            .and_call_original
+
+          subject.pattern(&block)
+        end
+      end
+    end
+  end
 end

@@ -61,6 +61,7 @@ module TmGrammar
       def generate_capture(capture)
         buffer.append('{', nl).indent do
           append_single('name', capture.name)
+          append_array('patterns', capture.patterns)
         end
 
         buffer.append('}')
