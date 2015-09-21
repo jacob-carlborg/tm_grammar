@@ -64,6 +64,21 @@ grammar
         end
       end
 
+      context 'when the grammar has a comment' do
+        let(:comment) { 'keyword.control.foo' }
+
+        it 'generates a TextMate grammar with a comment' do
+          node.comment = comment
+          result = <<-grammar
+{
+  scopeName = '#{scope_name}';
+  comment = '#{comment}';
+}
+grammar
+          generate.should == result.strip
+        end
+      end
+
       context 'when the grammar has patterns' do
         let(:pattern_name) { 'keyword.control.foo' }
 
@@ -229,6 +244,20 @@ grammar
           result = <<-grammar
 {
   contentName = '#{node.content_name}';
+}
+grammar
+          generate.should == result.strip
+        end
+      end
+
+      context 'when the pattern has a comment' do
+        let(:comment) { 'keyword.control.foo' }
+
+        it 'generates a TextMate pattern with a comment' do
+          node.comment = comment
+          result = <<-grammar
+{
+  comment = '#{comment}';
 }
 grammar
           generate.should == result.strip

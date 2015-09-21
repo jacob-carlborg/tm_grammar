@@ -76,6 +76,22 @@ module TmGrammar
         node.folding_stop_marker = marker
       end
 
+      # Sets the comment of the grammar.
+      #
+      # Corresponds to the `comment` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.comment 'foo'
+      #
+      # @param name [String] the name to set
+      def comment(comment)
+        node.comment = comment
+      end
+
       # Defines a new pattern.
       #
       # Corresponds to an element in the `patterns` ket in the TextMate grammar
@@ -213,6 +229,22 @@ module TmGrammar
       # @param name [String] the name to set
       def content_name(name)
         node.content_name = name
+      end
+
+      # Sets the comment of the pattern.
+      #
+      # Corresponds to the `comment` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.comment 'foo'
+      #
+      # @param name [String] the name to set
+      def comment(comment)
+        node.comment = comment
       end
 
       # Defines a capture for the pattern.

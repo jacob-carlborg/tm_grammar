@@ -61,6 +61,13 @@ module TmGrammar
       # @return [String, Regexp, nil] the match, or `nil` if none is set
       attr_accessor :first_line_match
 
+      # The comment of the grammar.
+      #
+      # Corresponds to `comment` key in the TextMate grammar syntax.
+      #
+      # @return [String] the comment
+      attr_accessor :comment
+
       # Initializes the receiver with the given scope name.
       #
       # @param scope_name [String] the scope name of the grammar.

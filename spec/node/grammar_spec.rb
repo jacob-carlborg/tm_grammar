@@ -69,6 +69,15 @@ describe TmGrammar::Node::Grammar do
     end
   end
 
+  describe 'comment' do
+    let(:comment) { 'this is a comment' }
+
+    it 'gets/sets the comment of the pattern' do
+      grammar.comment = comment
+      grammar.comment.should == comment
+    end
+  end
+
   describe 'add_pattern' do
     let(:pattern) { TmGrammar::Node::Pattern.new }
 

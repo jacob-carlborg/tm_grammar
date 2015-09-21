@@ -18,7 +18,7 @@ describe TmGrammar::Dsl do
   end
 
   describe TmGrammar::Dsl::Grammar do
-    let(:grammar) { TmGrammar::Grammar.new('foo', -> {})  }
+    let(:grammar) { TmGrammar::Grammar.new('foo', -> {}) }
     let(:node) { grammar.node }
     subject { Class.new { include TmGrammar::Dsl::Grammar }.new(grammar, node) }
 
@@ -58,6 +58,15 @@ describe TmGrammar::Dsl do
           .and_call_original
 
         subject.folding_stop_marker(marker)
+      end
+    end
+
+    describe 'comment' do
+      let(:comment) { 'foo' }
+
+      it 'sets the comment on the pattern node' do
+        node.should_receive(:comment=).with(comment).and_call_original
+        subject.comment(comment)
       end
     end
 
@@ -152,6 +161,15 @@ describe TmGrammar::Dsl do
       it 'sets the content name on the pattern node' do
         node.should_receive(:content_name=).with(name).and_call_original
         subject.content_name(name)
+      end
+    end
+
+    describe 'comment' do
+      let(:comment) { 'foo' }
+
+      it 'sets the comment on the pattern node' do
+        node.should_receive(:comment=).with(comment).and_call_original
+        subject.comment(comment)
       end
     end
 
@@ -283,7 +301,7 @@ describe TmGrammar::Dsl do
   end
 
   describe TmGrammar::Dsl::Capture do
-    let(:capture) { TmGrammar::Capture.new('foo', -> {})  }
+    let(:capture) { TmGrammar::Capture.new('foo', -> {}) }
     let(:node) { capture.node }
     subject { Class.new { include TmGrammar::Dsl::Capture }.new(capture, node) }
 

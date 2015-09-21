@@ -58,6 +58,15 @@ describe TmGrammar::Node::Pattern do
     end
   end
 
+  describe 'comment' do
+    let(:comment) { 'this is a comment' }
+
+    it 'gets/sets the comment of the pattern' do
+      pattern.comment = comment
+      pattern.comment.should == comment
+    end
+  end
+
   describe 'add_capture' do
     let(:capture) { TmGrammar::Node::Capture.new }
 

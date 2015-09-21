@@ -29,6 +29,7 @@ module TmGrammar
           append_single('foldingStartMarker', grammar.folding_start_marker)
           append_single('foldingStopMarker', grammar.folding_stop_marker)
           append_single('firstLineMatch', grammar.first_line_match)
+          append_single('comment', grammar.comment)
           append_array('patterns', grammar.patterns)
           append_dictionary('repository', grammar.repository)
         end
@@ -46,6 +47,7 @@ module TmGrammar
           append_single('begin', pattern.begin)
           append_single('end', pattern.end)
           append_single('contentName', pattern.content_name)
+          append_single('comment', pattern.comment)
           append_single('include', pattern.include)
           append_dictionary('captures', pattern.captures)
           append_dictionary('beginCaptures', pattern.begin_captures)

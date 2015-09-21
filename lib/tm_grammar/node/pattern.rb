@@ -50,6 +50,15 @@ module TmGrammar
       # @return [String, Regexp] the set content name, or `nil` if not set
       attr_accessor :content_name
 
+      # Gets/sets comment of the pattern.
+      #
+      # Corresponds to the `comment` key in the TextMate grammar syntax.
+      #
+      # @param comment [String] the comment to set
+      #
+      # @return [String] the set comment, or `nil` if not set
+      attr_accessor :comment
+
       # Gets/sets include for the pattern.
       #
       # Corresponds to the `include` key in the TextMate grammar syntax.
