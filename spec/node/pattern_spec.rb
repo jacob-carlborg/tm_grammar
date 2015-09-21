@@ -67,6 +67,15 @@ describe TmGrammar::Node::Pattern do
     end
   end
 
+  describe 'disabled' do
+    let(:disabled) { true }
+
+    it 'gets/sets the disabled of the pattern' do
+      pattern.disabled = disabled
+      pattern.disabled.should == disabled
+    end
+  end
+
   describe 'add_capture' do
     let(:capture) { TmGrammar::Node::Capture.new }
 

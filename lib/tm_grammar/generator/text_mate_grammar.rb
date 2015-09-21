@@ -48,6 +48,7 @@ module TmGrammar
           append_single('end', pattern.end)
           append_single('contentName', pattern.content_name)
           append_single('comment', pattern.comment)
+          buffer.append('disabled = ', 1, ';', nl) if pattern.disabled
           append_single('include', pattern.include)
           append_dictionary('captures', pattern.captures)
           append_dictionary('beginCaptures', pattern.begin_captures)

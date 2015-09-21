@@ -264,6 +264,20 @@ grammar
         end
       end
 
+      context 'when the pattern has a disabled' do
+        let(:disabled) { true }
+
+        it 'generates a TextMate pattern with a disabled' do
+          node.disabled = disabled
+          result = <<-grammar
+{
+  disabled = 1;
+}
+grammar
+          generate.should == result.strip
+        end
+      end
+
       context 'when the pattern has a include' do
         it 'generates a TextMate pattern with a include' do
           node.include = 'source.d'

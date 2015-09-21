@@ -173,6 +173,15 @@ describe TmGrammar::Dsl do
       end
     end
 
+    describe 'disabled' do
+      let(:disabled) { 'foo' }
+
+      it 'sets the disabled on the pattern node' do
+        node.should_receive(:disabled=).with(disabled).and_call_original
+        subject.disabled(disabled)
+      end
+    end
+
     describe 'capture' do
       let(:key) { 1 }
       let(:name) { 'foo' }

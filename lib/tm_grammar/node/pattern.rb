@@ -59,6 +59,15 @@ module TmGrammar
       # @return [String] the set comment, or `nil` if not set
       attr_accessor :comment
 
+      # Gets/sets disabled state of the pattern.
+      #
+      # Corresponds to the `disabled` key in the TextMate grammar syntax.
+      #
+      # @param disabled [Boolean] the state disabled to set
+      #
+      # @return [Boolean] the set state disabled, or `nil` if not set
+      attr_accessor :disabled
+
       # Gets/sets include for the pattern.
       #
       # Corresponds to the `include` key in the TextMate grammar syntax.

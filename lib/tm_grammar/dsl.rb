@@ -247,6 +247,22 @@ module TmGrammar
         node.comment = comment
       end
 
+      # Sets the disabled of the pattern.
+      #
+      # Corresponds to the `disabled` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.disabled true
+      #
+      # @param value [Boolean] the value to set
+      def disabled(value)
+        node.disabled = value
+      end
+
       # Defines a capture for the pattern.
       #
       # Corresponds to an element in the `captures` key in the TextMate grammar
