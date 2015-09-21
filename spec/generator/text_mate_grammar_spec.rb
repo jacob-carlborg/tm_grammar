@@ -494,6 +494,18 @@ grammar
           end
         end
       end
+
+      context 'when a string value contains a single quote' do
+        it 'generates a string value with double quotes' do
+          node.begin = "'"
+          result = <<-grammar
+{
+  begin = "#{node.begin}";
+}
+grammar
+          generate.should == result.strip
+        end
+      end
     end
 
     context 'capture' do
