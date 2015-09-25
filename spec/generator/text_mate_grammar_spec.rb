@@ -214,6 +214,19 @@ grammar
         end
       end
 
+      context 'when the pattern has a match which is a regular expression' do
+        it 'generates a TextMate pattern with a match' do
+          regexp = '\b(if|while|for|return)\b'
+          node.match = /#{regexp}/
+          result = <<-grammar
+{
+  match = '#{regexp}';
+}
+grammar
+          generate.should == result.strip
+        end
+      end
+
       context 'when the pattern has a begin' do
         it 'generates a TextMate pattern with a begin' do
           node.begin = '"'

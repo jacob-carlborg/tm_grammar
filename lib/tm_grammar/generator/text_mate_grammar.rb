@@ -9,15 +9,18 @@ module TmGrammar
         @buffer = buffer || TmGrammar::Util::Buffer.new
       end
 
+      # rubocop:disable Metrics/AbcSize
       def generate(node)
         match(node) do
           with(TmGrammar::Node::Grammar) { generate_grammar(node) }
           with(TmGrammar::Node::Pattern) { generate_pattern(node) }
           with(TmGrammar::Node::Capture) { generate_capture(node) }
           with(String) { generate_string(node) }
+          with(Regexp) { generate_regexp(node) }
           with(_) { raise "Unhandled node type #{node.class.name}" }
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
 
@@ -74,6 +77,10 @@ module TmGrammar
       def generate_string(string)
         quote = contains_single_quote?(string) ? '"' : "'"
         quote + string + quote
+      end
+
+      def generate_regexp(regexp)
+        "'" + regexp.source + "'"
       end
 
       def append_single(key, value)
