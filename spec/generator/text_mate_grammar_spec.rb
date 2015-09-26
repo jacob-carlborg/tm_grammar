@@ -183,6 +183,86 @@ grammar
           end
         end
       end
+
+      context 'when the rules_to_generate option is specified' do
+        let(:name) { 'variable' }
+        let(:match) { '\$[a-zA-Z0-9_]+' }
+        let(:pattern) { TmGrammar::Node::Pattern.new }
+        let(:rules_to_generate) { [name] }
+
+        let(:options) do
+          TmGrammar::Generator::TextMateGrammar::Options.new.tap do |o|
+            o.rules_to_generate = rules_to_generate
+          end
+        end
+
+        subject { TmGrammar::Generator::TextMateGrammar.new(buffer, options) }
+
+        before :each do
+          pattern.match = match
+          node.repository[name] = pattern
+        end
+
+        it 'generates those rules as patterns' do
+          result = <<-grammar
+{
+  scopeName = '#{scope_name}';
+  patterns = (
+    {
+      match = '#{match}';
+    }
+  );
+}
+grammar
+
+          generate.should == result.strip
+        end
+
+        context 'when multiple rules are in the repository' do
+          let(:rules_to_generate) { [name, name + '2'] }
+
+          before :each do
+            node.repository[name + '2'] = pattern
+            node.repository[name + '3'] = pattern
+          end
+
+          it 'only generates the specified rules' do
+            result = <<-grammar
+{
+  scopeName = '#{scope_name}';
+  patterns = (
+    {
+      match = '#{match}';
+    },
+    {
+      match = '#{match}';
+    }
+  );
+}
+grammar
+
+            generate.should == result.strip
+          end
+        end
+
+        context 'when other attributes are specified' do
+          it 'does not generate other attributes' do
+            node.comment = 'keyword.control.foo'
+            result = <<-grammar
+{
+  scopeName = '#{scope_name}';
+  patterns = (
+    {
+      match = '#{match}';
+    }
+  );
+}
+grammar
+
+            generate.should == result.strip
+          end
+        end
+      end
     end
 
     context 'pattern' do

@@ -5,8 +5,21 @@ module TmGrammar
       include TmGrammar::Node
       include TmGrammar::Util
 
-      def initialize(buffer = nil)
+      class Options
+        # The set of rules to generate.
+        #
+        # The rules will be generated as regular patterns, i.e. in the
+        # `patterns` array. If this is specified, no other attributes will be
+        # generated. This is useful for testing, when testing one pattern at
+        # the time.
+        #
+        # @param rules [Set<String>] the rules to generate
+        attr_accessor :rules_to_generate
+      end
+
+      def initialize(buffer = nil, options = nil)
         @buffer = buffer || TmGrammar::Util::Buffer.new
+        @options = options || Options.new
       end
 
       # rubocop:disable Metrics/AbcSize
@@ -25,17 +38,23 @@ module TmGrammar
       private
 
       attr_reader :buffer
+      attr_reader :options
 
       # rubocop:disable Metrics/AbcSize
       def generate_grammar(grammar)
         buffer.append('{', nl).indent do
           append_single('scopeName', grammar.scope_name)
-          append_single('foldingStartMarker', grammar.folding_start_marker)
-          append_single('foldingStopMarker', grammar.folding_stop_marker)
-          append_single('firstLineMatch', grammar.first_line_match)
-          append_single('comment', grammar.comment)
-          append_array('patterns', grammar.patterns)
-          append_dictionary('repository', grammar.repository)
+
+          if options.rules_to_generate.present?
+            append_array('patterns', extract_patterns(grammar.repository))
+          else
+            append_single('foldingStartMarker', grammar.folding_start_marker)
+            append_single('foldingStopMarker', grammar.folding_stop_marker)
+            append_single('firstLineMatch', grammar.first_line_match)
+            append_single('comment', grammar.comment)
+            append_array('patterns', grammar.patterns)
+            append_dictionary('repository', grammar.repository)
+          end
         end
 
         buffer.append('}')
@@ -123,6 +142,10 @@ module TmGrammar
 
       def contains_single_quote?(value)
         value.respond_to?(:include?) && value.include?("'")
+      end
+
+      def extract_patterns(repository)
+        repository.slice(*options.rules_to_generate).values
       end
     end
   end

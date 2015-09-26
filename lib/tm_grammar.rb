@@ -1,6 +1,8 @@
 require 'stringio'
 
+require 'active_support/core_ext/hash/slice'
 require 'active_support/core_ext/object/blank'
+
 require 'pattern-match'
 
 require 'tm_grammar/version'
