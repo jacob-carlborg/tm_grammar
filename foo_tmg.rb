@@ -1,5 +1,10 @@
 grammar 'source.d' do
   comment 'D language'
+  file_types %w(d di)
+  key_equivalent '^~D'
+  name 'D'
+  uuid 'D7C3A109-0466-4C28-9ECF-10753300FF46'
+  first_line_match '^#!.*\bg?dmd\b.'
 
   pattern 'comment.block.empty.d' do
     match '/\*\*/'
@@ -670,7 +675,7 @@ grammar 'source.d' do
   end
 
   rule 'string_escaped_char' do
-    pattern('constant.character.escape.d') { match /\\(\\|[abefnprtv''"?]|[0-3]\d{0,2}|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|&\w+;)/ }
+    pattern('constant.character.escape.d') { match /\\(\\|[abefnprtv'"?]|[0-3]\d{0,2}|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|&\w+;)/ }
     pattern('invalid.illegal.unknown-escape.d') { match /\\./ }
   end
 
