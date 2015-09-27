@@ -1,8 +1,10 @@
 require 'stringio'
 
+require 'active_support/core_ext/hash/keys'
 require 'active_support/core_ext/hash/slice'
 require 'active_support/core_ext/object/blank'
 
+require 'nokogiri'
 require 'pattern-match'
 
 require 'tm_grammar/version'
@@ -21,7 +23,9 @@ module TmGrammar
   end
 
   module Generator
+    autoload :Base, 'tm_grammar/generator/base'
     autoload :TextMateGrammar, 'tm_grammar/generator/text_mate_grammar'
+    autoload :TmLanguageXml, 'tm_grammar/generator/tm_language_xml'
   end
 
   module Node

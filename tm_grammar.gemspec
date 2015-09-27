@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'activesupport', '~> 4.2.4'
+  spec.add_dependency 'nokogiri', '~> 1.6.6'
   spec.add_dependency 'pattern-match', '~> 1.0.1'
 
   spec.add_development_dependency 'bundler', '~> 1.10.5'

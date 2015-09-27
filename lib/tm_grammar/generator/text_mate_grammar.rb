@@ -1,25 +1,14 @@
 module TmGrammar
   module Generator
-    class TextMateGrammar
+    class TextMateGrammar < Base
       using PatternMatch
       include TmGrammar::Node
       include TmGrammar::Util
 
-      class Options
-        # The set of rules to generate.
-        #
-        # The rules will be generated as regular patterns, i.e. in the
-        # `patterns` array. If this is specified, no other attributes will be
-        # generated. This is useful for testing, when testing one pattern at
-        # the time.
-        #
-        # @param rules [Set<String>] the rules to generate
-        attr_accessor :rules_to_generate
-      end
-
-      def initialize(buffer = nil, options = nil)
-        @buffer = buffer || TmGrammar::Util::Buffer.new
-        @options = options || Options.new
+      def initialize(options = nil)
+        super
+        indentation = self.options.indent_text * self.options.indent
+        @buffer = TmGrammar::Util::Buffer.new(indentation)
       end
 
       # rubocop:disable Metrics/AbcSize
@@ -38,7 +27,6 @@ module TmGrammar
       private
 
       attr_reader :buffer
-      attr_reader :options
 
       # rubocop:disable Metrics/AbcSize
       def generate_grammar(grammar)
@@ -142,10 +130,6 @@ module TmGrammar
 
       def contains_single_quote?(value)
         value.respond_to?(:include?) && value.include?("'")
-      end
-
-      def extract_patterns(repository)
-        repository.slice(*options.rules_to_generate).values
       end
     end
   end

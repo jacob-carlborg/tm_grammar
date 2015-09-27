@@ -1,3 +1,5 @@
+require 'pry'
+
 require 'tm_grammar'
 
 RSpec.configure do |config|

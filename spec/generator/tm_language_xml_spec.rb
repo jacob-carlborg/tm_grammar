@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TmGrammar::Generator::TextMateGrammar do
+describe TmGrammar::Generator::TmLanguageXml do
   let(:options) do
     TmGrammar::Generator::Base::Options.new.tap do |o|
       o.indent = 2
@@ -8,10 +8,33 @@ describe TmGrammar::Generator::TextMateGrammar do
     end
   end
 
-  subject { TmGrammar::Generator::TextMateGrammar.new(options) }
+  subject { TmGrammar::Generator::TmLanguageXml.new(options) }
+
+  let(:header) do
+    header = <<-grammar
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+grammar
+
+    header.strip
+  end
+
+  let(:footer) do
+    <<-grammar
+</dict>
+</plist>
+grammar
+
+  end
 
   def generate
-    subject.generate(node).to_s
+    subject.generate(node)
+  end
+
+  def build_result(reslut)
+    header + "\n" + reslut[0 ... -1] + "\n" + footer
   end
 
   describe 'generate' do
@@ -22,11 +45,10 @@ describe TmGrammar::Generator::TextMateGrammar do
       context 'when the grammar has a scope name' do
         it 'generates a TextMate grammar with a scope name' do
           result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-}
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-          generate.to_s.should == result.strip
+          generate.to_s.should == build_result(result)
         end
       end
 
@@ -34,12 +56,12 @@ grammar
         it 'generates a TextMate grammar with a folding start marker' do
           node.folding_start_marker = '\{\s*$'
           result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  foldingStartMarker = '#{node.folding_start_marker}';
-}
+  <key>foldingStartMarker</key>
+  <string>#{node.folding_start_marker}</string>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -47,12 +69,12 @@ grammar
         it 'generates a TextMate grammar with a folding stop marker' do
           node.folding_stop_marker = '^\s*\}'
           result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  foldingStopMarker = '#{node.folding_stop_marker}';
-}
+  <key>foldingStopMarker</key>
+  <string>#{node.folding_stop_marker}</string>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -60,12 +82,12 @@ grammar
         it 'generates a TextMate grammar with a first line match' do
           node.first_line_match = '^#!/.*\bruby\b'
           result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  firstLineMatch = '#{node.first_line_match}';
-}
+  <key>firstLineMatch</key>
+  <string>#{node.first_line_match}</string>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -75,12 +97,59 @@ grammar
         it 'generates a TextMate grammar with a comment' do
           node.comment = comment
           result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  comment = '#{comment}';
-}
+  <key>comment</key>
+  <string>#{comment}</string>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
+        end
+      end
+
+      context 'when the grammar has files types' do
+        let(:file_type) { 'src' }
+
+        it 'generates a TextMate grammar with a comment' do
+          node.file_types = [file_type]
+          result = <<-grammar
+  <key>fileTypes</key>
+  <array>
+    <string>#{file_type}</string>
+  </array>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
+grammar
+          generate.should == build_result(result)
+        end
+      end
+
+      context 'when the grammar has a key equivalent' do
+        let(:key_equivalent) { '^~F' }
+
+        it 'generates a TextMate grammar with a key equivalent' do
+          node.key_equivalent = key_equivalent
+          result = <<-grammar
+  <key>keyEquivalent</key>
+  <string>#{key_equivalent}</string>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
+grammar
+          generate.should == build_result(result)
+        end
+      end
+
+      context 'when the grammar has a uuid' do
+        let(:uuid) { '07FD2CA2-93CF-402D-B0F0-FE1F15EC03B7' }
+
+        it 'generates a TextMate grammar with a uuid' do
+          node.uuid = uuid
+          result = <<-grammar
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
+  <key>uuid</key>
+  <string>#{uuid}</string>
+grammar
+          generate.should == build_result(result)
         end
       end
 
@@ -95,17 +164,19 @@ grammar
             node.patterns << pattern
 
             result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  patterns = (
-    {
-      name = '#{pattern_name}';
-      begin = '#{pattern.begin}';
-    }
-  );
-}
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{pattern_name}</string>
+    </dict>
+  </array>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
 
@@ -117,21 +188,25 @@ grammar
             node.patterns << pattern << pattern
 
             result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  patterns = (
-    {
-      name = '#{pattern_name}';
-      begin = '#{pattern.begin}';
-    },
-    {
-      name = '#{pattern_name}';
-      begin = '#{pattern.begin}';
-    }
-  );
-}
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{pattern_name}</string>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{pattern_name}</string>
+    </dict>
+  </array>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
       end
@@ -149,16 +224,18 @@ grammar
         context 'when there is one rule in the repository' do
           it 'generates a TextMate grammar with a repository' do
             result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  repository = {
-    #{name} = {
-      match = '#{match}';
-    };
-  };
-}
+  <key>repository</key>
+  <dict>
+    <key>#{name}</key>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+  </dict>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
 
@@ -172,19 +249,23 @@ grammar
             node.repository[second_name] = second_pattern
 
             result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  repository = {
-    #{name} = {
-      match = '#{match}';
-    };
-    #{second_name} = {
-      match = '#{second_match}';
-    };
-  };
-}
+  <key>repository</key>
+  <dict>
+    <key>#{second_name}</key>
+    <dict>
+      <key>match</key>
+      <string>#{second_match}</string>
+    </dict>
+    <key>#{name}</key>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+  </dict>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
       end
@@ -196,10 +277,12 @@ grammar
         let(:rules_to_generate) { [name] }
 
         let(:options) do
-          super().tap { |o| o.rules_to_generate = rules_to_generate }
+          super().tap do |o|
+            o.rules_to_generate = rules_to_generate
+          end
         end
 
-        subject { TmGrammar::Generator::TextMateGrammar.new(options) }
+        subject { TmGrammar::Generator::TmLanguageXml.new(options) }
 
         before :each do
           pattern.match = match
@@ -207,18 +290,18 @@ grammar
         end
 
         it 'generates those rules as patterns' do
-          result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  patterns = (
-    {
-      match = '#{match}';
-    }
-  );
-}
+            result = <<-grammar
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+  </array>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-
-          generate.should == result.strip
+            generate.should == build_result(result)
         end
 
         context 'when multiple rules are in the repository' do
@@ -231,20 +314,21 @@ grammar
 
           it 'only generates the specified rules' do
             result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  patterns = (
-    {
-      match = '#{match}';
-    },
-    {
-      match = '#{match}';
-    }
-  );
-}
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+  </array>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
 
@@ -252,17 +336,17 @@ grammar
           it 'does not generate other attributes' do
             node.comment = 'keyword.control.foo'
             result = <<-grammar
-{
-  scopeName = '#{scope_name}';
-  patterns = (
-    {
-      match = '#{match}';
-    }
-  );
-}
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+  </array>
+  <key>scopeName</key>
+  <string>#{scope_name}</string>
 grammar
-
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
       end
@@ -277,11 +361,10 @@ grammar
         it 'generates a TextMate pattern with a name' do
           node.name = name
           result = <<-grammar
-{
-  name = '#{name}';
-}
+  <key>name</key>
+  <string>#{name}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -289,11 +372,10 @@ grammar
         it 'generates a TextMate pattern with a match' do
           node.match = '\b(if|while|for|return)\b'
           result = <<-grammar
-{
-  match = '#{node.match}';
-}
+  <key>match</key>
+  <string>#{node.match}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -302,11 +384,10 @@ grammar
           regexp = '\b(if|while|for|return)\b'
           node.match = /#{regexp}/
           result = <<-grammar
-{
-  match = '#{regexp}';
-}
+  <key>match</key>
+  <string>#{regexp}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -314,23 +395,21 @@ grammar
         it 'generates a TextMate pattern with a begin' do
           node.begin = '"'
           result = <<-grammar
-{
-  begin = '#{node.begin}';
-}
+  <key>begin</key>
+  <string>#{node.begin}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
-      context 'when the pattern has a end' do
+      context 'when the pattern has an end' do
         it 'generates a TextMate pattern with a end' do
           node.end = '"'
           result = <<-grammar
-{
-  end = '#{node.end}';
-}
+  <key>end</key>
+  <string>#{node.end}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -338,11 +417,10 @@ grammar
         it 'generates a TextMate pattern with a content name' do
           node.content_name = 'comment.block.preprocessor'
           result = <<-grammar
-{
-  contentName = '#{node.content_name}';
-}
+  <key>contentName</key>
+  <string>#{node.content_name}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -352,11 +430,10 @@ grammar
         it 'generates a TextMate pattern with a comment' do
           node.comment = comment
           result = <<-grammar
-{
-  comment = '#{comment}';
-}
+  <key>comment</key>
+  <string>#{node.comment}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -366,11 +443,10 @@ grammar
         it 'generates a TextMate pattern with a disabled' do
           node.disabled = disabled
           result = <<-grammar
-{
-  disabled = 1;
-}
+  <key>disabled</key>
+  <integer>1</integer>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -378,11 +454,10 @@ grammar
         it 'generates a TextMate pattern with a include' do
           node.include = 'source.d'
           result = <<-grammar
-{
-  include = '#{node.include}';
-}
+  <key>include</key>
+  <string>#{node.include}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -399,16 +474,17 @@ grammar
         context 'when there is one nested pattern' do
           it 'generates a TextMate pattern with nested patterns' do
             result = <<-grammar
-{
-  patterns = (
-    {
-      name = '#{nested_name}';
-      begin = '#{pattern.begin}';
-    }
-  );
-}
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{nested_name}</string>
+    </dict>
+  </array>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
 
@@ -417,20 +493,23 @@ grammar
             node.patterns << pattern
 
             result = <<-grammar
-{
-  patterns = (
-    {
-      name = '#{nested_name}';
-      begin = '#{pattern.begin}';
-    },
-    {
-      name = '#{nested_name}';
-      begin = '#{pattern.begin}';
-    }
-  );
-}
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{nested_name}</string>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{nested_name}</string>
+    </dict>
+  </array>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
       end
@@ -449,15 +528,16 @@ grammar
             capture.name = capture_name
 
             result = <<-grammar
-{
-  captures = {
-    #{key} = {
-      name = '#{capture_name}';
-    };
-  };
-}
+  <key>captures</key>
+  <dict>
+    <key>#{key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{capture_name}</string>
+    </dict>
+  </dict>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
 
@@ -471,18 +551,21 @@ grammar
             node.captures[second_key] = second_capture
 
             result = <<-grammar
-{
-  captures = {
-    #{key} = {
-      name = '#{capture_name}';
-    };
-    #{second_key} = {
-      name = '#{capture_name}';
-    };
-  };
-}
+  <key>captures</key>
+  <dict>
+    <key>#{key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{capture_name}</string>
+    </dict>
+    <key>#{second_key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{capture_name}</string>
+    </dict>
+  </dict>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
       end
@@ -501,15 +584,16 @@ grammar
             begin_capture.name = begin_capture_name
 
             result = <<-grammar
-{
-  beginCaptures = {
-    #{key} = {
-      name = '#{begin_capture_name}';
-    };
-  };
-}
+  <key>beginCaptures</key>
+  <dict>
+    <key>#{key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{begin_capture_name}</string>
+    </dict>
+  </dict>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
 
@@ -523,18 +607,21 @@ grammar
             node.begin_captures[second_key] = second_begin_capture
 
             result = <<-grammar
-{
-  beginCaptures = {
-    #{key} = {
-      name = '#{begin_capture_name}';
-    };
-    #{second_key} = {
-      name = '#{begin_capture_name}';
-    };
-  };
-}
+  <key>beginCaptures</key>
+  <dict>
+    <key>#{key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{begin_capture_name}</string>
+    </dict>
+    <key>#{second_key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{begin_capture_name}</string>
+    </dict>
+  </dict>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
       end
@@ -553,15 +640,16 @@ grammar
             end_capture.name = end_capture_name
 
             result = <<-grammar
-{
-  endCaptures = {
-    #{key} = {
-      name = '#{end_capture_name}';
-    };
-  };
-}
+  <key>endCaptures</key>
+  <dict>
+    <key>#{key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{end_capture_name}</string>
+    </dict>
+  </dict>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
 
@@ -575,18 +663,21 @@ grammar
             node.end_captures[second_key] = second_end_capture
 
             result = <<-grammar
-{
-  endCaptures = {
-    #{key} = {
-      name = '#{end_capture_name}';
-    };
-    #{second_key} = {
-      name = '#{end_capture_name}';
-    };
-  };
-}
+  <key>endCaptures</key>
+  <dict>
+    <key>#{key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{end_capture_name}</string>
+    </dict>
+    <key>#{second_key}</key>
+    <dict>
+      <key>name</key>
+      <string>#{end_capture_name}</string>
+    </dict>
+  </dict>
 grammar
-            generate.should == result.strip
+            generate.should == build_result(result)
           end
         end
       end
@@ -595,11 +686,10 @@ grammar
         it 'generates a string value with double quotes' do
           node.begin = "'"
           result = <<-grammar
-{
-  begin = "#{node.begin}";
-}
+  <key>begin</key>
+  <string>#{node.begin}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
     end
@@ -611,11 +701,10 @@ grammar
         it 'generates a TextMate capture with a name' do
           node.name = 'storage.type.objc'
           result = <<-grammar
-{
-  name = '#{node.name}';
-}
+  <key>name</key>
+  <string>#{node.name}</string>
 grammar
-          generate.should == result.strip
+          generate.should == build_result(result)
         end
       end
 
@@ -629,17 +718,18 @@ grammar
             pattern.begin = '"'
             node.patterns << pattern
 
-            result = <<-capture
-{
-  patterns = (
-    {
-      name = '#{pattern_name}';
-      begin = '#{pattern.begin}';
-    }
-  );
-}
-capture
-            generate.should == result.strip
+            result = <<-grammar
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{pattern_name}</string>
+    </dict>
+  </array>
+grammar
+            generate.should == build_result(result)
           end
         end
 
@@ -650,21 +740,24 @@ capture
             pattern.begin = '"'
             node.patterns << pattern << pattern
 
-            result = <<-capture
-{
-  patterns = (
-    {
-      name = '#{pattern_name}';
-      begin = '#{pattern.begin}';
-    },
-    {
-      name = '#{pattern_name}';
-      begin = '#{pattern.begin}';
-    }
-  );
-}
-capture
-            generate.should == result.strip
+            result = <<-grammar
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{pattern_name}</string>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>#{pattern.begin}</string>
+      <key>name</key>
+      <string>#{pattern_name}</string>
+    </dict>
+  </array>
+grammar
+            generate.should == build_result(result)
           end
         end
       end
