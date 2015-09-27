@@ -70,6 +70,33 @@ describe TmGrammar::Dsl do
       end
     end
 
+    describe 'name' do
+      let(:name) { 'foo' }
+
+      it 'sets the name on the pattern node' do
+        node.should_receive(:name=).with(name).and_call_original
+        subject.name(name)
+      end
+    end
+
+    describe 'key_equivalent' do
+      let(:key_equivalent) { '^~F' }
+
+      it 'sets the key_equivalent on the pattern node' do
+        node.should_receive(:key_equivalent=).with(key_equivalent).and_call_original
+        subject.key_equivalent(key_equivalent)
+      end
+    end
+
+    describe 'uuid' do
+      let(:uuid) { '07FD2CA2-93CF-402D-B0F0-FE1F15EC03B7' }
+
+      it 'sets the uuid on the pattern node' do
+        node.should_receive(:uuid=).with(uuid).and_call_original
+        subject.uuid(uuid)
+      end
+    end
+
     describe 'pattern' do
       let(:name) { 'foo' }
       let(:block) { -> {} }

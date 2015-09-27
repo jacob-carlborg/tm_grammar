@@ -78,6 +78,33 @@ describe TmGrammar::Node::Grammar do
     end
   end
 
+  describe 'name' do
+    let(:name) { 'this is a name' }
+
+    it 'gets/sets the name of the pattern' do
+      grammar.name = name
+      grammar.name.should == name
+    end
+  end
+
+  describe 'key_equivalent' do
+    let(:key_equivalent) { '^~F' }
+
+    it 'gets/sets the key_equivalent of the pattern' do
+      grammar.key_equivalent = key_equivalent
+      grammar.key_equivalent.should == key_equivalent
+    end
+  end
+
+  describe 'uuid' do
+    let(:uuid) { '07FD2CA2-93CF-402D-B0F0-FE1F15EC03B7' }
+
+    it 'gets/sets the uuid of the pattern' do
+      grammar.uuid = uuid
+      grammar.uuid.should == uuid
+    end
+  end
+
   describe 'add_pattern' do
     let(:pattern) { TmGrammar::Node::Pattern.new }
 

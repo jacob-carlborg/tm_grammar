@@ -92,6 +92,54 @@ module TmGrammar
         node.comment = comment
       end
 
+      # Sets the name of the pattern.
+      #
+      # Corresponds to the `name` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.name 'foo'
+      #
+      # @param name [String] the name to set
+      def name(name)
+        node.name = name
+      end
+
+      # Sets the key equivalent of the grammar.
+      #
+      # Corresponds to the `keyEquivalent` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.keyEquivalent '^~D'
+      #
+      # @param name [String] the name to set
+      def key_equivalent(key_equivalent)
+        node.key_equivalent = key_equivalent
+      end
+
+      # Sets the uuid of the pattern.
+      #
+      # Corresponds to the `uuid` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.uuid 'foo'
+      #
+      # @param uuid [String] the uuid to set
+      def uuid(uuid)
+        node.uuid = uuid
+      end
+
       # Defines a new pattern.
       #
       # Corresponds to an element in the `patterns` ket in the TextMate grammar

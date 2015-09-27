@@ -68,6 +68,27 @@ module TmGrammar
       # @return [String] the comment
       attr_accessor :comment
 
+      # The name of the grammar.
+      #
+      # Corresponds to `name` key in the TextMate grammar syntax.
+      #
+      # @return [String] the name
+      attr_accessor :name
+
+      # The key_equivalent of the grammar.
+      #
+      # Corresponds to `keyEquivalent` key in the TextMate grammar syntax.
+      #
+      # @return [String] the key_equivalent
+      attr_accessor :key_equivalent
+
+      # The uuid of the grammar.
+      #
+      # Corresponds to `uuid` key in the TextMate grammar syntax.
+      #
+      # @return [String] the uuid
+      attr_accessor :uuid
+
       # Initializes the receiver with the given scope name.
       #
       # @param scope_name [String] the scope name of the grammar.
