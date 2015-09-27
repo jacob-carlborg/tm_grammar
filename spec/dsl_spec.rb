@@ -97,6 +97,17 @@ describe TmGrammar::Dsl do
       end
     end
 
+    describe 'first_line_match' do
+      let(:first_line_match) { '^#!.*\bg?dmd\b.' }
+
+      it 'sets the first_line_match on the pattern node' do
+        node.should_receive(:first_line_match=).with(first_line_match)
+          .and_call_original
+
+        subject.first_line_match(first_line_match)
+      end
+    end
+
     describe 'pattern' do
       let(:name) { 'foo' }
       let(:block) { -> {} }

@@ -140,6 +140,22 @@ module TmGrammar
         node.uuid = uuid
       end
 
+      # Sets the first line match of the grammar.
+      #
+      # Corresponds to the `firstLineMatch` key in the TextMate grammar syntax.
+      #
+      # @example
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.first_line_match '^#!.*\bg?dmd\b.'
+      #
+      # @param name [String] the name to set
+      def first_line_match(first_line_match)
+        node.first_line_match = first_line_match
+      end
+
       # Defines a new pattern.
       #
       # Corresponds to an element in the `patterns` ket in the TextMate grammar
