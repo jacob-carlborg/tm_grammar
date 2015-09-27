@@ -29,6 +29,7 @@ module TmGrammar
       attr_reader :buffer
 
       # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/MethodLength
       def generate_grammar(grammar)
         buffer.append('{', nl).indent do
           append_single('scopeName', grammar.scope_name)
@@ -47,6 +48,7 @@ module TmGrammar
 
         buffer.append('}')
       end
+      # rubocop:enable Metrics/MethodLength
       # rubocop:enable Metrics/AbcSize
 
       # rubocop:disable Metrics/AbcSize

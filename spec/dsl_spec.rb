@@ -83,7 +83,9 @@ describe TmGrammar::Dsl do
       let(:key_equivalent) { '^~F' }
 
       it 'sets the key_equivalent on the pattern node' do
-        node.should_receive(:key_equivalent=).with(key_equivalent).and_call_original
+        node.should_receive(:key_equivalent=).with(key_equivalent)
+          .and_call_original
+
         subject.key_equivalent(key_equivalent)
       end
     end

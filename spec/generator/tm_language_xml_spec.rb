@@ -11,12 +11,14 @@ describe TmGrammar::Generator::TmLanguageXml do
   subject { TmGrammar::Generator::TmLanguageXml.new(options) }
 
   let(:header) do
+    # rubocop:disable Metrics/LineLength
     header = <<-grammar
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 grammar
+    # rubocop:enable Metrics/LineLength
 
     header.strip
   end
@@ -26,7 +28,6 @@ grammar
 </dict>
 </plist>
 grammar
-
   end
 
   def generate
@@ -34,7 +35,7 @@ grammar
   end
 
   def build_result(reslut)
-    header + "\n" + reslut[0 ... -1] + "\n" + footer
+    header + "\n" + reslut[0...-1] + "\n" + footer
   end
 
   describe 'generate' do
@@ -290,7 +291,7 @@ grammar
         end
 
         it 'generates those rules as patterns' do
-            result = <<-grammar
+          result = <<-grammar
   <key>patterns</key>
   <array>
     <dict>
@@ -301,7 +302,7 @@ grammar
   <key>scopeName</key>
   <string>#{scope_name}</string>
 grammar
-            generate.should == build_result(result)
+          generate.should == build_result(result)
         end
 
         context 'when multiple rules are in the repository' do

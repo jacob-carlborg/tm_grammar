@@ -1,5 +1,6 @@
 module TmGrammar
   module Generator
+    # rubocop:disable Metrics/ClassLength
     class TmLanguageXml < Base
       using PatternMatch
 
@@ -7,7 +8,7 @@ module TmGrammar
 
       def initialize(options = nil)
         super
-        @plist = Nokogiri::XML::Builder.new(encoding: 'UTF-8') { |_|  }
+        @plist = Nokogiri::XML::Builder.new(encoding: 'UTF-8') { |_| }
       end
 
       def generate(node)
@@ -22,11 +23,13 @@ module TmGrammar
 
       private
 
+      # rubocop:disable Metrics/LineLength
       PLIST_HEADER = <<-xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 xml
+      # rubocop:enable Metrics/LineLength
 
       PLIST_FOOTER = "\n</plist>\n"
 
@@ -49,6 +52,8 @@ xml
       end
       # rubocop:enable Metrics/AbcSize
 
+      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/MethodLength
       def generate_grammar(grammar)
         plist.dict do
           if options.rules_to_generate.present?
@@ -69,7 +74,11 @@ xml
           append_single('uuid', grammar.uuid)
         end
       end
+      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/AbcSize
 
+      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/MethodLength
       def generate_pattern(pattern)
         plist.dict do
           append_single('begin', pattern.begin)
@@ -86,6 +95,8 @@ xml
           append_array('patterns', pattern.patterns)
         end
       end
+      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/AbcSize
 
       def generate_capture(capture)
         plist.dict do
@@ -134,5 +145,6 @@ xml
         end
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
