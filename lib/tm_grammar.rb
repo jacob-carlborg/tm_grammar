@@ -41,6 +41,10 @@ module TmGrammar
     end
   end
 
+  module Pass
+    autoload :MatchEvaluator, 'tm_grammar/pass/match_evaluator'
+  end
+
   module Util
     autoload :Buffer, 'tm_grammar/util/buffer'
   end
