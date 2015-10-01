@@ -19,11 +19,16 @@ module TmGrammar
       def evaluate(node)
         match(node) do
           with(String) { evaluate_string(node) }
+          with(Regexp) { evaluate_regexp(node) }
         end
       end
       # rubocop:enable Metrics/AbcSize
 
       private
+
+      def evaluate_regexp(regexp)
+        regexp.source
+      end
 
       def evaluate_string(string)
         string

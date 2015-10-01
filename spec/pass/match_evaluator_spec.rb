@@ -21,5 +21,14 @@ describe TmGrammar::Pass::MatchEvaluator do
         evaluate(node).should == node
       end
     end
+
+    context 'when the node is a regular expression' do
+      let(:source) { 'foo' }
+      let(:node) { Regexp.new(source) }
+
+      it 'returns the source of the regular expression' do
+        evaluate(node).should == source
+      end
+    end
   end
 end
