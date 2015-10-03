@@ -32,6 +32,13 @@ module TmGrammar
     autoload :Capture, 'tm_grammar/node/capture'
     autoload :Grammar, 'tm_grammar/node/grammar'
     autoload :Pattern, 'tm_grammar/node/pattern'
+
+    class Match
+      autoload :And, 'tm_grammar/node/match/and'
+      autoload :Base, 'tm_grammar/node/match/base'
+      autoload :Binary, 'tm_grammar/node/match/binary'
+      autoload :Or, 'tm_grammar/node/match/or'
+    end
   end
 
   module Util
