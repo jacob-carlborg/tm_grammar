@@ -43,6 +43,24 @@ describe TmGrammar::Pass::MatchEvaluator do
       end
     end
 
+    context 'when the node is a Capture node' do
+      let(:inner_node) { 'foo' }
+      let(:node) { Match::Capture.new(inner_node) }
+
+      it 'groups the node in a capture group' do
+        evaluate(node).should == "(#{inner_node})"
+      end
+    end
+
+    context 'when the node is a Group node' do
+      let(:inner_node) { 'foo' }
+      let(:node) { Match::Group.new(inner_node) }
+
+      it 'groups the node in a non-capture group' do
+        evaluate(node).should == "(?:#{inner_node})"
+      end
+    end
+
     context 'when the node is an Or node' do
       let(:left) { 'left' }
       let(:right) { 'right' }

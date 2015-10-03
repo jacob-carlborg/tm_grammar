@@ -37,6 +37,8 @@ module TmGrammar
       autoload :And, 'tm_grammar/node/match/and'
       autoload :Base, 'tm_grammar/node/match/base'
       autoload :Binary, 'tm_grammar/node/match/binary'
+      autoload :Capture, 'tm_grammar/node/match/capture'
+      autoload :Group, 'tm_grammar/node/match/group'
       autoload :Or, 'tm_grammar/node/match/or'
       autoload :Term, 'tm_grammar/node/match/term'
     end
