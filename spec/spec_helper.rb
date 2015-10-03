@@ -1,4 +1,5 @@
 require 'pry'
+require 'rspec/its'
 
 require 'tm_grammar'
 

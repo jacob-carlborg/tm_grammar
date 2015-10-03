@@ -71,6 +71,35 @@ describe TmGrammar::Pass::MatchEvaluator do
       end
     end
 
+    context 'when the node is a Repetition node' do
+      let(:inner_node) { 'value' }
+      let(:node) { Match::Repetition.new(inner_node, type) }
+
+      context 'when the repetition is zero or one' do
+        let(:type) { Match::Repetition::TYPE_OPTIONAL }
+
+        it 'returns the corresponding regular expression' do
+          evaluate(node).should == "(?:#{inner_node})?"
+        end
+      end
+
+      context 'when the repetition is zero or more' do
+        let(:type) { Match::Repetition::TYPE_ZERO_OR_MORE }
+
+        it 'returns the corresponding regular expression' do
+          evaluate(node).should == "(?:#{inner_node})*"
+        end
+      end
+
+      context 'when the repetition is one or more' do
+        let(:type) { Match::Repetition::TYPE_ONE_OR_MORE }
+
+        it 'returns the corresponding regular expression' do
+          evaluate(node).should == "(?:#{inner_node})+"
+        end
+      end
+    end
+
     context 'when the node is a Term node' do
       let(:value) { 'foo' }
       let(:node) { Match::Term.new(value) }

@@ -40,6 +40,7 @@ module TmGrammar
       autoload :Capture, 'tm_grammar/node/match/capture'
       autoload :Group, 'tm_grammar/node/match/group'
       autoload :Or, 'tm_grammar/node/match/or'
+      autoload :Repetition, 'tm_grammar/node/match/repetition'
       autoload :Term, 'tm_grammar/node/match/term'
     end
   end
