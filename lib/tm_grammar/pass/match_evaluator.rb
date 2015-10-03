@@ -24,6 +24,7 @@ module TmGrammar
         match(node) do
           with(Match::And.(left, right)) { evaluate_and(left, right) }
           with(Match::Or.(left, right)) { evaluate_or(left, right) }
+          with(Match::Term.(value)) { evaluate_term(value) }
           with(String) { evaluate_string(node) }
           with(Regexp) { evaluate_regexp(node) }
         end
@@ -42,13 +43,16 @@ module TmGrammar
         "(?:#{left}|#{right})"
       end
 
-
       def evaluate_regexp(regexp)
         regexp.source
       end
 
       def evaluate_string(string)
         string
+      end
+
+      def evaluate_term(value)
+        evaluate(value)
       end
     end
   end

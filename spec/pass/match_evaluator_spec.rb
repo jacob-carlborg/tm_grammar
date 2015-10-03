@@ -52,5 +52,14 @@ describe TmGrammar::Pass::MatchEvaluator do
         evaluate(node).should == "(?:#{left}|#{right})"
       end
     end
+
+    context 'when the node is a Term node' do
+      let(:value) { 'foo' }
+      let(:node) { Match::Term.new(value) }
+
+      it 'returns value of the term node' do
+        evaluate(node).should == value
+      end
+    end
   end
 end

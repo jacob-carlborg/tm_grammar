@@ -38,6 +38,7 @@ module TmGrammar
       autoload :Base, 'tm_grammar/node/match/base'
       autoload :Binary, 'tm_grammar/node/match/binary'
       autoload :Or, 'tm_grammar/node/match/or'
+      autoload :Term, 'tm_grammar/node/match/term'
     end
   end
 
