@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe TmGrammar::Pass::MatchEvaluator do
+  Match = TmGrammar::Node::Match
+
   let(:grammar) { TmGrammar::Node::Grammar.new('source.foo') }
   let(:pattern) { TmGrammar::Node::Pattern.new }
   let(:capture_number) { 1 }
@@ -28,6 +30,26 @@ describe TmGrammar::Pass::MatchEvaluator do
 
       it 'returns the source of the regular expression' do
         evaluate(node).should == source
+      end
+    end
+
+    context 'when the node is an And node' do
+      let(:left) { 'left' }
+      let(:right) { 'right' }
+      let(:node) { Match::And.new(left, right) }
+
+      it 'concatenates the left and right nodes' do
+        evaluate(node).should == left + right
+      end
+    end
+
+    context 'when the node is an Or node' do
+      let(:left) { 'left' }
+      let(:right) { 'right' }
+      let(:node) { Match::Or.new(left, right) }
+
+      it 'ors the left and right nodes' do
+        evaluate(node).should == "(?:#{left}|#{right})"
       end
     end
   end
