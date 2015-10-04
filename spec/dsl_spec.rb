@@ -423,5 +423,23 @@ describe TmGrammar::Dsl do
         subject.method_missing(name).rule.should == name
       end
     end
+
+    describe 'optional' do
+      let(:node) { 'foo' }
+
+      it 'returns a Repetition match node' do
+        type = TmGrammar::Node::Match::Repetition
+        subject.optional(node).should be_a(type)
+      end
+
+      it 'the returned node contains the given node' do
+        subject.optional(node).node.should == node
+      end
+
+      it 'the returned node has the repetition type optional' do
+        type = TmGrammar::Node::Match::Repetition::TYPE_OPTIONAL
+        subject.optional(node).type.should == type
+      end
+    end
   end
 end

@@ -556,6 +556,10 @@ module TmGrammar
       def method_missing(name)
         Match::RuleReference.new(name, pattern)
       end
+
+      def optional(node)
+        Match::Repetition.new(node, Match::Repetition::TYPE_OPTIONAL)
+      end
     end
   end
 end
