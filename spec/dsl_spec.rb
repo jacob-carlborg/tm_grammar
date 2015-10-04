@@ -441,5 +441,23 @@ describe TmGrammar::Dsl do
         subject.optional(node).type.should == type
       end
     end
+
+    describe 'zero_or_more' do
+      let(:node) { 'foo' }
+
+      it 'returns a Repetition match node' do
+        type = TmGrammar::Node::Match::Repetition
+        subject.zero_or_more(node).should be_a(type)
+      end
+
+      it 'the returned node contains the given node' do
+        subject.zero_or_more(node).node.should == node
+      end
+
+      it 'the returned node has the repetition type zero or more' do
+        type = TmGrammar::Node::Match::Repetition::TYPE_ZERO_OR_MORE
+        subject.zero_or_more(node).type.should == type
+      end
+    end
   end
 end

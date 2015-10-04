@@ -560,6 +560,10 @@ module TmGrammar
       def optional(node)
         Match::Repetition.new(node, Match::Repetition::TYPE_OPTIONAL)
       end
+
+      def zero_or_more(node)
+        Match::Repetition.new(node, Match::Repetition::TYPE_ZERO_OR_MORE)
+      end
     end
   end
 end
