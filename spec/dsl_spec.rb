@@ -145,7 +145,8 @@ describe TmGrammar::Dsl do
   end
 
   describe TmGrammar::Dsl::Pattern do
-    let(:pattern_object) { TmGrammar::Pattern.new(-> {}) }
+    let(:grammar) { TmGrammar::Grammar.new('foo', -> {}).node }
+    let(:pattern_object) { TmGrammar::Pattern.new(grammar, -> {}) }
     let(:node) { pattern_object.node }
 
     subject do
@@ -350,7 +351,8 @@ describe TmGrammar::Dsl do
   end
 
   describe TmGrammar::Dsl::Capture do
-    let(:capture) { TmGrammar::Capture.new('foo', -> {}) }
+    let(:grammar) { TmGrammar::Grammar.new('foo', -> {}).node }
+    let(:capture) { TmGrammar::Capture.new(grammar, 'foo', -> {}) }
     let(:node) { capture.node }
     subject { Class.new { include TmGrammar::Dsl::Capture }.new(capture, node) }
 

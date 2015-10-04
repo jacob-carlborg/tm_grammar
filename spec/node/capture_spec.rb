@@ -18,7 +18,9 @@ describe TmGrammar::Node::Capture do
   end
 
   describe 'add_pattern' do
-    let(:pattern) { TmGrammar::Node::Pattern.new }
+    let(:scope_name) { 'source.foo' }
+    let(:grammar) { TmGrammar::Node::Grammar.new(scope_name) }
+    let(:pattern) { TmGrammar::Node::Pattern.new(grammar) }
 
     it 'adds a pattern to the grammar' do
       capture.add_pattern(pattern)

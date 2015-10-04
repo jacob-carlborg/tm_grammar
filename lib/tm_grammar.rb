@@ -1,5 +1,6 @@
 require 'stringio'
 
+require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/hash/keys'
 require 'active_support/core_ext/hash/slice'
 require 'active_support/core_ext/object/blank'
@@ -41,6 +42,7 @@ module TmGrammar
       autoload :Group, 'tm_grammar/node/match/group'
       autoload :Or, 'tm_grammar/node/match/or'
       autoload :Repetition, 'tm_grammar/node/match/repetition'
+      autoload :RuleReference, 'tm_grammar/node/match/rule_reference'
       autoload :Term, 'tm_grammar/node/match/term'
     end
   end
@@ -51,5 +53,6 @@ module TmGrammar
 
   module Util
     autoload :Buffer, 'tm_grammar/util/buffer'
+    autoload :Util, 'tm_grammar/util/util'
   end
 end

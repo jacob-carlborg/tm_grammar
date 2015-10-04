@@ -8,9 +8,13 @@ module TmGrammar
     # @return [TmGrammar::Node::Pattern] the pattern node
     attr_reader :node
 
-    def initialize(block)
+    attr_reader :grammar
+
+    def initialize(grammar, block)
+      @grammar = grammar
       @block = block
-      @node = TmGrammar::Node::Pattern.new
+      @node = TmGrammar::Node::Pattern.new(grammar)
+      @matches = 0
     end
 
     # Evaluates the pattern.
@@ -38,7 +42,7 @@ module TmGrammar
     # @param name [String] the name of the capture
     # @param block [Proc] the implementation of the capture
     def define_capture(key, name = nil, block = nil)
-      capture_node = TmGrammar::Capture.new(name, block).evaluate
+      capture_node = TmGrammar::Capture.new(grammar, name, block).evaluate
       node.add_capture(key, capture_node)
     end
 
@@ -48,7 +52,7 @@ module TmGrammar
     # @param name [String] the name of the capture
     # @param block [Proc] the implementation of the capture
     def define_begin_capture(key, name = nil, block = nil)
-      capture_node = TmGrammar::Capture.new(name, block).evaluate
+      capture_node = TmGrammar::Capture.new(grammar, name, block).evaluate
       node.add_begin_capture(key, capture_node)
     end
 
@@ -58,7 +62,7 @@ module TmGrammar
     # @param name [String] the name of the capture
     # @param block [Proc] the implementation of the capture
     def define_end_capture(key, name = nil, block = nil)
-      capture_node = TmGrammar::Capture.new(name, block).evaluate
+      capture_node = TmGrammar::Capture.new(grammar, name, block).evaluate
       node.add_end_capture(key, capture_node)
     end
 
@@ -67,7 +71,7 @@ module TmGrammar
     # @param name [String, nil] the name of the pattern
     # @param block [Proc] the implementation of the pattern
     def define_pattern(name, block)
-      pattern_node = TmGrammar::Pattern.new(block).evaluate
+      pattern_node = TmGrammar::Pattern.new(grammar, block).evaluate
       pattern_node.name = name
       node.add_pattern(pattern_node)
     end

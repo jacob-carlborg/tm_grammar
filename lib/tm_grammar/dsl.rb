@@ -242,9 +242,22 @@ module TmGrammar
       #
       #   Foo.new.match 'foo'
       #
+      # @example Match with a block
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.match do
+      #     `foo`
+      #   end
+      #
       # @param match [String, Regexp] the match to set
-      def match(match)
-        node.match = match
+      def match(match = nil, &block)
+        if block_given?
+          pattern_object.define_match(block)
+        else
+          node.match = match
+        end
       end
 
       # Sets the begin match of the pattern.

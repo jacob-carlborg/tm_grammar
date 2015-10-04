@@ -16,14 +16,14 @@ module TmGrammar
       # Corresponds to `patterns` key in the TextMate grammar syntax.
       #
       # @return [Array<Pattern>] the patterns
-      attr_reader :patterns
+      attr_accessor :patterns
 
       # The repository of the grammar.
       #
       # Corresponds to `repository` key in the TextMate grammar syntax.
       #
       # @return [{ String => Pattern }] the patterns in the repository
-      attr_reader :repository
+      attr_accessor :repository
 
       # Gets/sets the file types of the grammar.
       #
@@ -96,7 +96,7 @@ module TmGrammar
       def initialize(scope_name)
         @scope_name = scope_name
         @patterns = []
-        @repository = {}
+        @repository = {}.with_indifferent_access
       end
 
       # Adds a pattern to the grammar.

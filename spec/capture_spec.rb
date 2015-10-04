@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe TmGrammar::Capture do
+  let(:grammar) { TmGrammar::Grammar.new('foo', -> {}).node }
   let(:name) { 'foo' }
   let(:block) { -> {} }
-  let(:capture) { TmGrammar::Capture.new(name, block) }
+  let(:capture) { TmGrammar::Capture.new(grammar, name, block) }
   let(:node) { capture.node }
 
   subject { pattern }
@@ -22,14 +23,14 @@ describe TmGrammar::Capture do
     it 'evaluates the capture block' do
       i = 0
       block = -> { i += 1 }
-      capture = TmGrammar::Capture.new(name, block)
+      capture = TmGrammar::Capture.new(grammar, name, block)
       -> { capture.evaluate }.should change { i }.by(1)
     end
 
     it 'evaluates the capture in a capture context' do
       context = nil
       block = -> { context = self }
-      pattern = TmGrammar::Capture.new(name, block)
+      pattern = TmGrammar::Capture.new(grammar, name, block)
       pattern.evaluate
       context.should be_a(TmGrammar::Capture::Context)
     end

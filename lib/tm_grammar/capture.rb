@@ -12,7 +12,8 @@ module TmGrammar
     #
     # @param name [String] the name of the capture
     # @param block [Proc] the implementation of the capture
-    def initialize(name, block)
+    def initialize(grammar, name, block)
+      @grammar = grammar
       @block = block
       @node = TmGrammar::Node::Capture.new
       @node.name = name
@@ -44,13 +45,14 @@ module TmGrammar
     # @param name [String, nil] the name of the pattern
     # @param block [Proc] the implementation of the pattern
     def define_pattern(name, block)
-      pattern_node = TmGrammar::Pattern.new(block).evaluate
+      pattern_node = TmGrammar::Pattern.new(grammar, block).evaluate
       pattern_node.name = name
       node.add_pattern(pattern_node)
     end
 
     private
 
+    attr_reader :grammar
     attr_reader :block
 
     class Context

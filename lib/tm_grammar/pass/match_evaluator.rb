@@ -33,8 +33,16 @@ module TmGrammar
           with(Match::Repetition.(n, ZERO_OR_ONE)) { evaluate_zero_or_one(n) }
           with(Match::Repetition.(n, ZERO_OR_MORE)) { evaluate_zero_or_more(n) }
           with(Match::Repetition.(n, ONE_OR_MORE)) { evaluate_one_or_more(n) }
+
+          with(Match::RuleReference.(rule, containing_pattern, ref_pattern)) do
+            evaluate_rule_reference(rule, containing_pattern, ref_pattern)
+          end
+
+          with(TmGrammar::Node::Pattern) { evaluate_pattern(node) }
+
           with(String) { evaluate_string(node) }
           with(Regexp) { evaluate_regexp(node) }
+          with(_) { raise "Unhandled node #{node.class}"}
         end
       end
       # rubocop:enable Metrics/AbcSize
@@ -61,8 +69,21 @@ module TmGrammar
         "(?:#{left}|#{right})"
       end
 
+      def evaluate_pattern(pattern)
+        evaluate(pattern.match)
+      end
+
       def evaluate_regexp(regexp)
         regexp.source
+      end
+
+      def evaluate_rule_reference(rule, containing_pattern, referenced_pattern)
+        block = -> { pattern { include "##{rule}" } }
+        capture = TmGrammar::Capture.new(containing_pattern.grammar, nil, block)
+        containing_pattern.add_capture(
+          containing_pattern.new_capture_number, capture.evaluate
+        )
+        evaluate(Match::Capture.new(evaluate(referenced_pattern)))
       end
 
       def evaluate_string(string)
@@ -78,11 +99,24 @@ module TmGrammar
       end
 
       def evaluate_zero_or_more(node)
-        evaluate(group(node)) + '*'
+        evaluate_repetition(node, '*')
       end
 
       def evaluate_one_or_more(node)
-        evaluate(group(node)) + '+'
+        evaluate_repetition(node, '+')
+      end
+
+      def evaluate_repetition(node, suffix)
+        if node.is_a?(Match::RuleReference)
+          node = evaluate(node)
+          evaluate(capture(node + suffix))
+        else
+          evaluate(group(node)) + suffix
+        end
+      end
+
+      def capture(node)
+        Match::Capture.new(node)
       end
 
       def group(node)

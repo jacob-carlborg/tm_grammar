@@ -8,6 +8,9 @@ describe TmGrammar::Generator::TextMateGrammar do
     end
   end
 
+  let(:scope_name) { 'source.foo' }
+  let(:grammar) { TmGrammar::Node::Grammar.new(scope_name) }
+
   subject { TmGrammar::Generator::TextMateGrammar.new(options) }
 
   def generate
@@ -16,8 +19,7 @@ describe TmGrammar::Generator::TextMateGrammar do
 
   describe 'generate' do
     context 'grammar' do
-      let(:scope_name) { 'source.foo' }
-      let(:node) { TmGrammar::Node::Grammar.new(scope_name) }
+      let(:node) { grammar }
 
       context 'when the grammar has a scope name' do
         it 'generates a TextMate grammar with a scope name' do
@@ -89,7 +91,7 @@ grammar
 
         context 'when there is one pattern' do
           it 'generates a TextMate grammar with patterns' do
-            pattern = TmGrammar::Node::Pattern.new
+            pattern = TmGrammar::Node::Pattern.new(grammar)
             pattern.name = pattern_name
             pattern.begin = '"'
             node.patterns << pattern
@@ -111,7 +113,7 @@ grammar
 
         context 'when there are multiple patterns' do
           it 'generates a TextMate grammar with patterns' do
-            pattern = TmGrammar::Node::Pattern.new
+            pattern = TmGrammar::Node::Pattern.new(grammar)
             pattern.name = pattern_name
             pattern.begin = '"'
             node.patterns << pattern << pattern
@@ -139,7 +141,7 @@ grammar
       context 'when the grammar has a repository' do
         let(:name) { 'variable' }
         let(:match) { '\$[a-zA-Z0-9_]+' }
-        let(:pattern) { TmGrammar::Node::Pattern.new }
+        let(:pattern) { TmGrammar::Node::Pattern.new(grammar) }
 
         before :each do
           pattern.match = match
@@ -167,7 +169,7 @@ grammar
           let(:second_match) { '\\.' }
 
           it 'generates a TextMate grammar with rules' do
-            second_pattern = TmGrammar::Node::Pattern.new
+            second_pattern = TmGrammar::Node::Pattern.new(grammar)
             second_pattern.match = second_match
             node.repository[second_name] = second_pattern
 
@@ -192,7 +194,7 @@ grammar
       context 'when the rules_to_generate option is specified' do
         let(:name) { 'variable' }
         let(:match) { '\$[a-zA-Z0-9_]+' }
-        let(:pattern) { TmGrammar::Node::Pattern.new }
+        let(:pattern) { TmGrammar::Node::Pattern.new(grammar) }
         let(:rules_to_generate) { [name] }
 
         let(:options) do
@@ -269,7 +271,7 @@ grammar
     end
 
     context 'pattern' do
-      let(:node) { TmGrammar::Node::Pattern.new }
+      let(:node) { TmGrammar::Node::Pattern.new(grammar) }
 
       context 'when the pattern has a name' do
         let(:name) { 'keyword.control.foo' }
@@ -388,7 +390,7 @@ grammar
 
       context 'when the pattern has nested patterns' do
         let(:nested_name) { 'keyword.control.foo' }
-        let(:pattern) { TmGrammar::Node::Pattern.new }
+        let(:pattern) { TmGrammar::Node::Pattern.new(grammar) }
 
         before :each do
           pattern.name = nested_name
@@ -624,7 +626,7 @@ grammar
 
         context 'when there is one pattern' do
           it 'generates a TextMate capture with patterns' do
-            pattern = TmGrammar::Node::Pattern.new
+            pattern = TmGrammar::Node::Pattern.new(grammar)
             pattern.name = pattern_name
             pattern.begin = '"'
             node.patterns << pattern
@@ -645,7 +647,7 @@ capture
 
         context 'when there are multiple patterns' do
           it 'generates a TextMate capture with patterns' do
-            pattern = TmGrammar::Node::Pattern.new
+            pattern = TmGrammar::Node::Pattern.new(grammar)
             pattern.name = pattern_name
             pattern.begin = '"'
             node.patterns << pattern << pattern

@@ -46,7 +46,7 @@ module TmGrammar
     # @param name [String, nil] the name of the pattern
     # @param block [Proc] the implementation of the pattern
     def define_pattern(name, block)
-      pattern_node = TmGrammar::Pattern.new(block).evaluate
+      pattern_node = TmGrammar::Pattern.new(node, block).evaluate
       pattern_node.name = name
       node.add_pattern(pattern_node)
     end
@@ -56,7 +56,7 @@ module TmGrammar
     # @param name [String] the name of the rule
     # @param block [Proc] the implementation of the rule
     def define_rule(name, block)
-      pattern_node = TmGrammar::Pattern.new(block).evaluate
+      pattern_node = TmGrammar::Pattern.new(node, block).evaluate
       node.add_rule(name, pattern_node)
     end
 

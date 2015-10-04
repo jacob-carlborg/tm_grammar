@@ -5,6 +5,11 @@ module TmGrammar
     # Corresponds to an element in `patterns` attribute in the TextMate grammar
     # syntax.
     class Pattern
+      # The grammar node this pattern belongs to.
+      #
+      # @return [TmGrammar::Node::Grammar] the grammar
+      attr_reader :grammar
+
       # Gets/sets name of the pattern.
       #
       # Corresponds to the `name` key in the TextMate grammar syntax.
@@ -105,11 +110,13 @@ module TmGrammar
       # @return [<Pattern>] the patterns
       attr_reader :patterns
 
-      def initialize
+      def initialize(grammar)
+        @grammar = grammar
         @captures = {}
         @begin_captures = {}
         @end_captures = {}
         @patterns = []
+        @capture_number = 0
       end
 
       # Adds a capture to the pattern.
@@ -149,6 +156,10 @@ module TmGrammar
       # @return [void]
       def add_pattern(pattern)
         @patterns << pattern
+      end
+
+      def new_capture_number
+        @capture_number += 1
       end
     end
   end

@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe TmGrammar::Node::Pattern do
-  let(:pattern) { TmGrammar::Node::Pattern.new }
+  let(:scope_name) { 'source.foo' }
+  let(:grammar) { TmGrammar::Node::Grammar.new(scope_name) }
+  let(:pattern) { TmGrammar::Node::Pattern.new(grammar) }
 
   describe 'initialize' do
     it 'initializes a new pattern node' do
@@ -106,7 +108,7 @@ describe TmGrammar::Node::Pattern do
   end
 
   describe 'add_pattern' do
-    let(:node) { TmGrammar::Node::Pattern.new }
+    let(:node) { TmGrammar::Node::Pattern.new(grammar) }
 
     it 'adds a pattern to the grammar' do
       pattern.add_pattern(node)

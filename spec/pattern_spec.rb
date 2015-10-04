@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe TmGrammar::Pattern do
+  let(:grammar) { TmGrammar::Grammar.new('foo', -> {}).node }
   let(:block) { -> {} }
-  let(:pattern) { TmGrammar::Pattern.new(block) }
+  let(:pattern) { TmGrammar::Pattern.new(grammar, block) }
   let(:node) { pattern.node }
 
   subject { pattern }
@@ -17,14 +18,14 @@ describe TmGrammar::Pattern do
     it 'evaluates the pattern block' do
       i = 0
       block = -> { i += 1 }
-      pattern = TmGrammar::Pattern.new(block)
+      pattern = TmGrammar::Pattern.new(grammar, block)
       -> { pattern.evaluate }.should change { i }.by(1)
     end
 
     it 'evaluates the pattern in a grammar context' do
       context = nil
       block = -> { context = self }
-      pattern = TmGrammar::Pattern.new(block)
+      pattern = TmGrammar::Pattern.new(grammar, block)
       pattern.evaluate
       context.should be_a(TmGrammar::Pattern::Context)
     end
@@ -152,6 +153,18 @@ describe TmGrammar::Pattern do
         .and_call_original
 
       subject.define_pattern(name, block)
+    end
+  end
+
+  describe 'define_match' do
+    let(:block) { -> {} }
+
+    it 'defines a match' do
+      pattern = TmGrammar::Node::Match
+      node.should_receive(:match=).with(an_instance_of(pattern))
+        .and_call_original
+
+      subject.define_match(block)
     end
   end
 end
