@@ -39,6 +39,7 @@ module TmGrammar
           end
 
           with(TmGrammar::Node::Pattern) { evaluate_pattern(node) }
+          with(TmGrammar::Match) { evaluate(node.evaluate) }
 
           with(String) { evaluate_string(node) }
           with(Regexp) { evaluate_regexp(node) }

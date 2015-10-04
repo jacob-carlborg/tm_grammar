@@ -40,4 +40,33 @@ tmg
       parser.parse_from_file(path)
     end
   end
+
+  describe 'handle_pattern' do
+    let(:pattern) { TmGrammar::Node::Pattern.new(nil) }
+    let(:match_result) { :result }
+
+    before :each do
+      parser.stub(:resolve_matches).and_return(match_result)
+    end
+
+    def handle_pattern
+      subject.send(:handle_pattern, pattern)
+    end
+
+    it 'returns a new pattern' do
+      handle_pattern.should_not equal(pattern)
+    end
+
+    it 'updates the match' do
+      handle_pattern.match.should == match_result
+    end
+
+    it 'updates the begin match' do
+      handle_pattern.begin.should == match_result
+    end
+
+    it 'updates the end match' do
+      handle_pattern.end.should == match_result
+    end
+  end
 end

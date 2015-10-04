@@ -76,6 +76,13 @@ module TmGrammar
       node.add_pattern(pattern_node)
     end
 
+    # Defines a new match on the pattern.
+    #
+    # @param block [Proc] the implementation of the match
+    def define_match(block)
+      node.match = TmGrammar::Match.new(node, block)
+    end
+
     private
 
     attr_reader :block

@@ -170,6 +170,16 @@ describe TmGrammar::Pass::MatchEvaluator do
       end
     end
 
+    context 'when the node is a Match node' do
+      let(:block) { -> { 'foo' } }
+      let(:pattern) { TmGrammar::Node::Pattern.new(grammar) }
+      let(:node) { TmGrammar::Match.new(pattern, block) }
+
+      it 'returns the evaluated value of match' do
+        evaluate(node).should == 'foo'
+      end
+    end
+
     context 'when the node is a Term node' do
       let(:value) { 'foo' }
       let(:node) { Match::Term.new(value) }

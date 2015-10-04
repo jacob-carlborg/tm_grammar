@@ -176,6 +176,17 @@ describe TmGrammar::Dsl do
         node.should_receive(:match=).with(match).and_call_original
         subject.match(match)
       end
+
+      context 'with block' do
+        let(:block) { -> {} }
+
+        it 'defines a match for the pattern' do
+          pattern_object.should_receive(:define_match).with(block)
+            .and_call_original
+
+          subject.match(&block)
+        end
+      end
     end
 
     describe 'begin' do

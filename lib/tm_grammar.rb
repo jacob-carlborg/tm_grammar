@@ -3,6 +3,7 @@ require 'stringio'
 require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/hash/keys'
 require 'active_support/core_ext/hash/slice'
+require 'active_support/core_ext/hash/transform_values'
 require 'active_support/core_ext/object/blank'
 
 require 'nokogiri'
@@ -13,6 +14,7 @@ require 'tm_grammar/version'
 module TmGrammar
   autoload :Capture, 'tm_grammar/capture'
   autoload :Grammar, 'tm_grammar/grammar'
+  autoload :Match, 'tm_grammar/match'
   autoload :Parser, 'tm_grammar/parser'
   autoload :Pattern, 'tm_grammar/pattern'
 

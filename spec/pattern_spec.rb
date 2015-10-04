@@ -158,12 +158,10 @@ describe TmGrammar::Pattern do
 
   describe 'define_match' do
     let(:block) { -> {} }
+    let(:match) { TmGrammar::Match.new(node, block) }
 
     it 'defines a match' do
-      pattern = TmGrammar::Node::Match
-      node.should_receive(:match=).with(an_instance_of(pattern))
-        .and_call_original
-
+      node.should_receive(:match=).with(match).and_call_original
       subject.define_match(block)
     end
   end
