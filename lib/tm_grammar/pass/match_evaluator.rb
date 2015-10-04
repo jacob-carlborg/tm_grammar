@@ -23,6 +23,8 @@ module TmGrammar
       end
 
       # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Style/LambdaCall
       def evaluate(node)
         match(node) do
           with(Match::And.(left, right)) { evaluate_and(left, right) }
@@ -43,9 +45,11 @@ module TmGrammar
 
           with(String) { evaluate_string(node) }
           with(Regexp) { evaluate_regexp(node) }
-          with(_) { raise "Unhandled node #{node.class}"}
+          with(_) { raise "Unhandled node #{node.class}" }
         end
       end
+      # rubocop:enable Style/LambdaCall
+      # rubocop:enable Metrics/MethodLength
       # rubocop:enable Metrics/AbcSize
 
       private
