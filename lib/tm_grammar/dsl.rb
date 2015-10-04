@@ -537,8 +537,24 @@ module TmGrammar
 
       private_constant :Match
 
+      # Returns the pattern node.
+      #
+      # @return [TmMatch::Node::Pattern] the pattern node
+      attr_reader :pattern
+
+      # Initializes the receiver with the given pattern node.
+      #
+      # @param pattern [TmMatch::Node::Pattern] the pattern node
+      def initialize(pattern)
+        @pattern = pattern
+      end
+
       def `(other)
         Match::Term.new(other)
+      end
+
+      def method_missing(name)
+        Match::RuleReference.new(name, pattern)
       end
     end
   end

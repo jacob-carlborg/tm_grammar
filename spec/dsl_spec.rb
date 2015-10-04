@@ -390,7 +390,15 @@ describe TmGrammar::Dsl do
   end
 
   describe TmGrammar::Dsl::Match do
-    subject { Class.new { include TmGrammar::Dsl::Match }.new }
+    let(:grammar) { TmGrammar::Node::Grammar.new('source.foo') }
+    let(:pattern) { TmGrammar::Node::Pattern.new(grammar) }
+    subject { Class.new { include TmGrammar::Dsl::Match }.new(pattern) }
+
+    describe 'initialize' do
+      it 'initialize the receiver with the given grammar and node' do
+        subject.pattern.should == pattern
+      end
+    end
 
     describe '´' do
       it 'returns a Term match node' do
@@ -400,6 +408,19 @@ describe TmGrammar::Dsl do
 
       it 'the returned node contains the given value' do
         subject.instance_eval { `foo` }.value.should == 'foo'
+      end
+    end
+
+    describe 'method_missing' do
+      let(:name) { :foo }
+
+      it 'returns a RuleReference match node' do
+        type = TmGrammar::Node::Match::RuleReference
+        subject.method_missing(name).should be_a(type)
+      end
+
+      it 'the returned node contains the name of the called method' do
+        subject.method_missing(name).rule.should == name
       end
     end
   end

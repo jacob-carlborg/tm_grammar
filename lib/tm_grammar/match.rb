@@ -2,6 +2,11 @@ module TmGrammar
   class Match
     using PatternMatch
 
+    # Returns the containing pattern node.
+    #
+    # @return [TmGrammar::Node::Pattern] the pattern node
+    attr_reader :pattern
+
     # Initializes the receiver with the given pattern node and block
     #
     # @example
@@ -38,7 +43,7 @@ module TmGrammar
     # @return [TmGrammar::Node::Match] a pattern node
     def evaluate
       @evaluate ||= begin
-        context = Context.new
+        context = Context.new(pattern)
         root = context.instance_exec(&block)
         e = TmGrammar::Pass::MatchEvaluator.new(grammar, pattern)
         e.evaluate(root)
@@ -48,7 +53,6 @@ module TmGrammar
     protected
 
     attr_reader :block
-    attr_reader :pattern
 
     private
 
