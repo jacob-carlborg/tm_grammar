@@ -564,6 +564,10 @@ module TmGrammar
       def zero_or_more(node)
         Match::Repetition.new(node, Match::Repetition::TYPE_ZERO_OR_MORE)
       end
+
+      def one_or_more(node)
+        Match::Repetition.new(node, Match::Repetition::TYPE_ONE_OR_MORE)
+      end
     end
   end
 end
