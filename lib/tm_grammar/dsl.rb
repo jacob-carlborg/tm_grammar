@@ -531,5 +531,15 @@ module TmGrammar
         capture.define_pattern(name, block)
       end
     end
+
+    module Match
+      Match = TmGrammar::Node::Match
+
+      private_constant :Match
+
+      def `(other)
+        Match::Term.new(other)
+      end
+    end
   end
 end

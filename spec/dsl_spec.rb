@@ -388,4 +388,19 @@ describe TmGrammar::Dsl do
       end
     end
   end
+
+  describe TmGrammar::Dsl::Match do
+    subject { Class.new { include TmGrammar::Dsl::Match }.new }
+
+    describe '´' do
+      it 'returns a Term match node' do
+        type = TmGrammar::Node::Match::Term
+        subject.instance_eval { `foo` }.should be_a(type)
+      end
+
+      it 'the returned node contains the given value' do
+        subject.instance_eval { `foo` }.value.should == 'foo'
+      end
+    end
+  end
 end

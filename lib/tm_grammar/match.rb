@@ -55,6 +55,7 @@ module TmGrammar
     attr_reader :grammar
 
     class Context
+      include TmGrammar::Dsl::Match
     end
   end
 end

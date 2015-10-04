@@ -22,6 +22,7 @@ module TmGrammar
     autoload :Capture, 'tm_grammar/dsl'
     autoload :Global, 'tm_grammar/dsl'
     autoload :Grammar, 'tm_grammar/dsl'
+    autoload :Match, 'tm_grammar/dsl'
     autoload :Pattern, 'tm_grammar/dsl'
   end
 
