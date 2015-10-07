@@ -12,6 +12,7 @@ require 'pattern-match'
 require 'tm_grammar/version'
 
 module TmGrammar
+  autoload :Application, 'tm_grammar/application'
   autoload :Capture, 'tm_grammar/capture'
   autoload :Grammar, 'tm_grammar/grammar'
   autoload :Match, 'tm_grammar/match'
