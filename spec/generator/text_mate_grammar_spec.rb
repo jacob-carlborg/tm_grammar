@@ -217,6 +217,11 @@ grammar
       match = '#{match}';
     }
   );
+  repository = {
+    variable = {
+      match = '#{match}';
+    };
+  };
 }
 grammar
 
@@ -243,6 +248,17 @@ grammar
       match = '#{match}';
     }
   );
+  repository = {
+    variable = {
+      match = '#{match}';
+    };
+    variable2 = {
+      match = '#{match}';
+    };
+    variable3 = {
+      match = '#{match}';
+    };
+  };
 }
 grammar
 
@@ -261,6 +277,11 @@ grammar
       match = '#{match}';
     }
   );
+  repository = {
+    variable = {
+      match = '#{match}';
+    };
+  };
 }
 grammar
 

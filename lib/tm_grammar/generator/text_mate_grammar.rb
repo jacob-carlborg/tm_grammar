@@ -36,6 +36,7 @@ module TmGrammar
 
           if options.rules_to_generate.present?
             append_array('patterns', extract_patterns(grammar.repository))
+            append_dictionary('repository', grammar.repository)
           else
             append_single('foldingStartMarker', grammar.folding_start_marker)
             append_single('foldingStopMarker', grammar.folding_stop_marker)

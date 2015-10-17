@@ -58,6 +58,7 @@ xml
         plist.dict do
           if options.rules_to_generate.present?
             append_array('patterns', extract_patterns(grammar.repository))
+            append_dictionary('repository', grammar.repository)
           else
             append_single('comment', grammar.comment)
             append_array('fileTypes', grammar.file_types)

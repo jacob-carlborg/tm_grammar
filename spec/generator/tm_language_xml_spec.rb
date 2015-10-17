@@ -301,6 +301,14 @@ grammar
       <string>#{match}</string>
     </dict>
   </array>
+  <key>repository</key>
+  <dict>
+    <key>variable</key>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+  </dict>
   <key>scopeName</key>
   <string>#{scope_name}</string>
 grammar
@@ -328,6 +336,24 @@ grammar
       <string>#{match}</string>
     </dict>
   </array>
+  <key>repository</key>
+  <dict>
+    <key>variable</key>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+    <key>variable2</key>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+    <key>variable3</key>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+  </dict>
   <key>scopeName</key>
   <string>#{scope_name}</string>
 grammar
@@ -346,6 +372,14 @@ grammar
       <string>#{match}</string>
     </dict>
   </array>
+  <key>repository</key>
+  <dict>
+    <key>variable</key>
+    <dict>
+      <key>match</key>
+      <string>#{match}</string>
+    </dict>
+  </dict>
   <key>scopeName</key>
   <string>#{scope_name}</string>
 grammar
