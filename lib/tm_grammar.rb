@@ -18,6 +18,7 @@ module TmGrammar
   autoload :Match, 'tm_grammar/match'
   autoload :Parser, 'tm_grammar/parser'
   autoload :Pattern, 'tm_grammar/pattern'
+  autoload :Traits, 'tm_grammar/traits'
 
   module Dsl
     autoload :Capture, 'tm_grammar/dsl'
@@ -25,6 +26,7 @@ module TmGrammar
     autoload :Grammar, 'tm_grammar/dsl'
     autoload :Match, 'tm_grammar/dsl'
     autoload :Pattern, 'tm_grammar/dsl'
+    autoload :Shared, 'tm_grammar/dsl'
   end
 
   module Generator

@@ -9,7 +9,12 @@ module TmGrammar
 
     def parse(content, path = nil)
       args = [content]
-      args += [path, 1] if path
+
+      if path
+        path = File.expand_path(path)
+        args += [path, 1]
+      end
+
       grammar = Context.new.instance_eval(*args)
       resolve_matches(grammar)
     end

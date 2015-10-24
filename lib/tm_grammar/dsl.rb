@@ -1,12 +1,58 @@
+# Declares a trait for later inclusion in a grammar.
+#
+# @example
+#   class Foo
+#     include TmGrammar::Dsl::Global
+#   end
+#
+#   Foo.new.trait :identifier do
+#     rule 'identifier' do
+#        name 'support.other.identifier.foo'
+#        match '[_\p{L}](?:[_\p{L}\d])*'
+#     end
+#   end
+#
+# @param name [Symbol, String] the name of the trait. The name is used
+# later to include the trait in a grammar.
+#
+# @param block [Proc] the content of the trait
+def trait(name, &block)
+  TmGrammar::Traits.register_trait(name, block)
+end
+
 module TmGrammar
   module Dsl
+    module Shared
+      # Mixin a previously registered trait in the current scope.
+      #
+      # @param name [Symbol, String] the name of the trait to mixin
+      def mixin(name)
+        instance_exec(&TmGrammar::Traits.retrieve_trait(name))
+      end
+    end
+
     module Global
       def grammar(scope_name, &block)
         TmGrammar::Grammar.new(scope_name, block).evaluate
       end
+
+      # Requires a path .tm_lang file relatively.
+      #
+      # @param path [String] the path to a .tm_lang file to require
+      def import(path)
+        caller_path = caller.first.split(':').first
+        relative_dir = File.dirname(caller_path)
+        absolute_path = File.absolute_path(path, relative_dir)
+        full_path = absolute_path + '.tm_lang.rb'
+        path_to_require = File.exist?(full_path) ? full_path : absolute_path
+
+        require(path_to_require)
+      end
     end
 
     module Grammar
+      include Shared
+
       # Returns the grammar.
       #
       # @return [TmGrammar:::Grammar] the grammar
@@ -196,6 +242,8 @@ module TmGrammar
     end
 
     module Pattern
+      include Shared
+
       # Returns the pattern object.
       #
       # @return [TmGrammar::Pattern] the pattern object
@@ -493,6 +541,8 @@ module TmGrammar
     end
 
     module Capture
+      include Shared
+
       # Returns the capture.
       #
       # @return [TmCapture:::Capture] the capture

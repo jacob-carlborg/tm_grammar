@@ -1,6 +1,25 @@
 require 'spec_helper'
 
 describe TmGrammar::Dsl do
+  shared_examples 'shared' do
+    describe 'mixin' do
+      let(:name) { :foo }
+      let(:block) { -> { bar } }
+
+      it 'mixes in a trait' do
+        subject.should_receive(:bar)
+
+        TmGrammar::Traits.register_trait(name, block)
+        subject.mixin(name)
+      end
+    end
+  end
+
+  describe TmGrammar::Dsl::Shared do
+    subject { Class.new { include TmGrammar::Dsl::Shared }.new }
+    include_examples 'shared'
+  end
+
   describe TmGrammar::Dsl::Global do
     subject { Class.new { include TmGrammar::Dsl::Global }.new }
 
@@ -15,9 +34,53 @@ describe TmGrammar::Dsl do
         subject.grammar(scope_name, &block)
       end
     end
+
+    describe 'trait' do
+      let(:name) { :foo }
+      let(:block) { -> {} }
+
+      it 'declares a trait' do
+        TmGrammar::Traits.should_receive(:register_trait).with(name, block)
+          .and_call_original
+
+        subject.send(:trait, name, &block)
+      end
+    end
+
+    describe 'imports' do
+      let(:path) { 'foo/bar' }
+
+      before :each do
+        File.stub(:exist?).and_return(exist_resut)
+        subject.should_receive(:require).with(expected)
+      end
+
+      context 'when a file with the .tm_lang extension exists' do
+        let(:exist_resut) { true }
+
+        let(:expected) do
+          File.join(File.dirname(__FILE__), path) + '.tm_lang.rb'
+        end
+
+        it 'requires a .tm_lang file relatively' do
+          subject.import(path)
+        end
+      end
+
+      context 'when a file with the .tm_lang extension does not exist' do
+        let(:exist_resut) { false }
+        let(:expected) { File.join(File.dirname(__FILE__), path) }
+
+        it 'fallbacks to standard require_relative' do
+          subject.import(path)
+        end
+      end
+    end
   end
 
   describe TmGrammar::Dsl::Grammar do
+    include_examples 'shared'
+
     let(:grammar) { TmGrammar::Grammar.new('foo', -> {}) }
     let(:node) { grammar.node }
     subject { Class.new { include TmGrammar::Dsl::Grammar }.new(grammar, node) }
@@ -145,6 +208,8 @@ describe TmGrammar::Dsl do
   end
 
   describe TmGrammar::Dsl::Pattern do
+    include_examples 'shared'
+
     let(:grammar) { TmGrammar::Grammar.new('foo', -> {}).node }
     let(:pattern_object) { TmGrammar::Pattern.new(grammar, -> {}) }
     let(:node) { pattern_object.node }
@@ -362,6 +427,8 @@ describe TmGrammar::Dsl do
   end
 
   describe TmGrammar::Dsl::Capture do
+    include_examples 'shared'
+
     let(:grammar) { TmGrammar::Grammar.new('foo', -> {}).node }
     let(:capture) { TmGrammar::Capture.new(grammar, 'foo', -> {}) }
     let(:node) { capture.node }
