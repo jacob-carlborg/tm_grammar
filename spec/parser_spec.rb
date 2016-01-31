@@ -18,6 +18,8 @@ tmg
   end
 
   describe 'parse' do
+    Grammar = TmGrammar::Node::Grammar
+
     it 'evaluates tm grammar' do
       ::RSpec::Mocks.space.any_instance_proxy_for(TmGrammar::Dsl::Global)
         .should_receive(:grammar).with(scope_name)
@@ -27,6 +29,16 @@ tmg
 
     it 'returns a grammar node' do
       parser.parse(tm_grammar).should be_a(TmGrammar::Node::Grammar)
+    end
+
+    it 'resolves matches' do
+      parser.should_receive(:resolve_matches).once.ordered
+        .with(an_instance_of(Grammar)).and_call_original
+
+      parser.should_receive(:resolve_matches).once.ordered.with([])
+      parser.should_receive(:resolve_matches).once.ordered.with({})
+
+      parser.parse(tm_grammar)
     end
   end
 

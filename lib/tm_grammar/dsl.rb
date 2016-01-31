@@ -319,9 +319,23 @@ module TmGrammar
       #
       #   Foo.new.begin 'foo'
       #
+      # @example Begin with a block
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.begin do
+      #     `foo`
+      #   end
+      #
       # @param match [String, Regexp] the match to set
-      def begin(match)
-        node.begin = match
+      # @param block [Proc] the implementation of the begin match
+      def begin(match = nil, &block)
+        if block_given?
+          pattern_object.define_begin_match(block)
+        else
+          node.begin = match
+        end
       end
 
       # Sets the end match of the pattern.

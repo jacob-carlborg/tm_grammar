@@ -165,4 +165,14 @@ describe TmGrammar::Pattern do
       subject.define_match(block)
     end
   end
+
+  describe 'define_begin_match' do
+    let(:block) { -> {} }
+    let(:match) { TmGrammar::Match.new(node, block) }
+
+    it 'defines a begin match' do
+      node.should_receive(:begin=).with(match).and_call_original
+      subject.define_begin_match(block)
+    end
+  end
 end

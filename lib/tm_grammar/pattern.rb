@@ -83,6 +83,13 @@ module TmGrammar
       node.match = TmGrammar::Match.new(node, block)
     end
 
+    # Defines a new begin match on the pattern.
+    #
+    # @param block [Proc] the implementation of the begin match
+    def define_begin_match(block)
+      node.begin = TmGrammar::Match.new(node, block)
+    end
+
     private
 
     attr_reader :block
