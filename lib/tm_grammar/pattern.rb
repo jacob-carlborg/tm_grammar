@@ -90,6 +90,13 @@ module TmGrammar
       node.begin = TmGrammar::Match.new(node, block)
     end
 
+    # Defines a new end match on the pattern.
+    #
+    # @param block [Proc] the implementation of the end match
+    def define_end_match(block)
+      node.end = TmGrammar::Match.new(node, block)
+    end
+
     private
 
     attr_reader :block

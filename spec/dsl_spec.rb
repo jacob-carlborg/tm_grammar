@@ -281,6 +281,17 @@ describe TmGrammar::Dsl do
         node.should_receive(:end=).with(match).and_call_original
         subject.end(match)
       end
+
+      context 'with block' do
+        let(:block) { -> {} }
+
+        it 'defines a match for the pattern' do
+          pattern_object.should_receive(:define_end_match).with(block)
+            .and_call_original
+
+          subject.end(&block)
+        end
+      end
     end
 
     describe 'content_name' do

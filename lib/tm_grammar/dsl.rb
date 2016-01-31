@@ -349,9 +349,23 @@ module TmGrammar
       #
       #   Foo.new.end 'foo'
       #
+      # @example End with a block
+      #   class Foo
+      #     include TmGrammar::Dsl::Pattern
+      #   end
+      #
+      #   Foo.new.end do
+      #     `foo`
+      #   end
+      #
       # @param match [String, Regexp] the match to set
-      def end(match)
-        node.end = match
+      # @param block [Proc] the implementation of the end match
+      def end(match = nil, &block)
+        if block_given?
+          pattern_object.define_end_match(block)
+        else
+          node.end = match
+        end
       end
 
       # Sets the content name of the pattern.
