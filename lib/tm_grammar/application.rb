@@ -25,7 +25,9 @@ module TmGrammar
       new(ARGV).run
     end
 
+    # rubocop:disable Metrics/AbcSize
     def run
+      parse_verbose_argument(raw_args, args)
       handle_errors do
         @option_parser = parse_arguments(raw_args, args)
         exit = handle_arguments(args)
@@ -34,6 +36,7 @@ module TmGrammar
         puts generator.generate(ast)
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -83,6 +86,10 @@ module TmGrammar
         list = VALID_FORMATS.join(', ')
         "(#{list})"
       end
+    end
+
+    def parse_verbose_argument(raw_args, args)
+      args.verbose = raw_args.include?('-v') || raw_args.include?('--verbose')
     end
 
     # rubocop:disable Metrics/AbcSize
