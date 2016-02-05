@@ -511,6 +511,23 @@ describe TmGrammar::Dsl do
       it 'the returned node contains the name of the called method' do
         subject.method_missing(name).rule.should == name
       end
+
+      context 'when the name ends with ?' do
+        let(:name) { :foo? }
+
+        it 'returns an optional match node' do
+          subject.method_missing(name).should be_optional
+        end
+
+        it 'the optional node is a RuleReference match node' do
+          type = TmGrammar::Node::Match::RuleReference
+          subject.method_missing(name).node.should be_a(type)
+        end
+
+        it 'the name of the RuleReference node does not contain ?' do
+          subject.method_missing(name).node.rule.to_s.should_not include('?')
+        end
+      end
     end
 
     describe 'optional' do

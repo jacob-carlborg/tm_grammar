@@ -28,6 +28,10 @@ module TmGrammar
           "Repetition(#{node}#{type_string})"
         end
 
+        def optional?
+          type == TYPE_OPTIONAL
+        end
+
         private
 
         def type_to_string(type)

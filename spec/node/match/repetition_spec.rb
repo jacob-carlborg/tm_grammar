@@ -71,6 +71,17 @@ describe TmGrammar::Node::Match::Repetition do
     end
   end
 
+  describe 'optional?' do
+    context 'when the repetition type is an optional' do
+      its(:optional?) { should == true }
+    end
+
+    context 'when the repetition type is not an optional' do
+      let(:type) { Repetition::TYPE_ZERO_OR_MORE }
+      its(:optional?) { should == false }
+    end
+  end
+
   context 'when the type is TYPE_OPTIONAL' do
     let(:type) { Repetition::TYPE_OPTIONAL }
     its(:to_s) { should == 'Repetition(value?)' }

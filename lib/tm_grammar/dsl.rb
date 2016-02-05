@@ -632,7 +632,13 @@ module TmGrammar
       end
 
       def method_missing(name)
-        Match::RuleReference.new(name, pattern)
+        name = name.to_s
+
+        if name.end_with?('?')
+          optional(Match::RuleReference.new(name[0...-1].to_sym, pattern))
+        else
+          Match::RuleReference.new(name.to_sym, pattern)
+        end
       end
 
       def optional(node)
