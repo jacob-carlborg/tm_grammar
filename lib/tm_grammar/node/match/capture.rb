@@ -3,14 +3,17 @@ module TmGrammar
     class Match
       class Capture < Base
         attr_reader :node
+        attr_reader :name
 
         def self.deconstruct(capture)
           super
-          [capture.node]
+          name = capture.name
+          name ? [capture.node, name] : [capture.node]
         end
 
-        def initialize(node)
+        def initialize(node, name = nil)
           @node = node
+          @name = name
         end
 
         def ==(other)

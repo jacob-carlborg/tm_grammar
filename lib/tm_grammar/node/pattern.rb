@@ -116,7 +116,6 @@ module TmGrammar
         @begin_captures = {}
         @end_captures = {}
         @patterns = []
-        @capture_number = 0
       end
 
       # Adds a capture to the pattern.
@@ -156,10 +155,6 @@ module TmGrammar
       # @return [void]
       def add_pattern(pattern)
         @patterns << pattern
-      end
-
-      def new_capture_number
-        @capture_number += 1
       end
     end
   end

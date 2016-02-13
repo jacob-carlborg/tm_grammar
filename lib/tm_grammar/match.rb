@@ -22,6 +22,7 @@ module TmGrammar
       @pattern = pattern
       @grammar = pattern.grammar
       @block = block
+      @evaluate = {}
     end
 
     def ==(other)
@@ -41,12 +42,12 @@ module TmGrammar
     #   puts i # => 1
     #
     # @return [TmGrammar::Node::Match] a pattern node
-    def evaluate
-      @evaluate ||= begin
+    def evaluate(top_level_ref = false)
+      @evaluate[top_level_ref] ||= begin
         context = Context.new(pattern)
         root = context.instance_exec(&block)
         e = TmGrammar::Pass::MatchEvaluator.new(grammar, pattern)
-        e.evaluate(root)
+        e.evaluate(root, top_level_ref)
       end
     end
 

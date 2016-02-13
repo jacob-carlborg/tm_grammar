@@ -11,8 +11,8 @@ describe TmGrammar::Pass::MatchEvaluator do
     TmGrammar::Pass::MatchEvaluator.new(grammar, pattern)
   end
 
-  def evaluate(node)
-    evaluator.evaluate(node)
+  def evaluate(node, top_level_ref = false)
+    evaluator.evaluate(node, top_level_ref)
   end
 
   describe 'evaluate' do
@@ -49,6 +49,20 @@ describe TmGrammar::Pass::MatchEvaluator do
 
       it 'groups the node in a capture group' do
         evaluate(node).should == "(#{inner_node})"
+      end
+
+      context 'when the node is part of a reference node' do
+        it 'groups the node in a non-capture group' do
+          evaluate(node, true).should == "(?:#{inner_node})"
+        end
+
+        context 'when the node is a named Capture node' do
+          let(:node) { Match::Capture.new(inner_node, 'bar') }
+
+          it 'groups the node in a non-capture group' do
+            evaluate(node, true).should == "(?:#{inner_node})"
+          end
+        end
       end
     end
 
@@ -114,7 +128,7 @@ describe TmGrammar::Pass::MatchEvaluator do
           let(:type) { Match::Repetition::TYPE_OPTIONAL }
 
           it 'returns the corresponding regular expression' do
-            evaluate(node).should == "(?:(#{pattern.match}))?"
+            evaluate(node).should == "(?:(?<#{rule}>#{pattern.match}))?"
           end
         end
 
@@ -122,7 +136,7 @@ describe TmGrammar::Pass::MatchEvaluator do
           let(:type) { Match::Repetition::TYPE_ZERO_OR_MORE }
 
           it 'returns the corresponding regular expression' do
-            evaluate(node).should == "((#{pattern.match})*)"
+            evaluate(node).should == "(?<#{rule}>(?:#{pattern.match})*)"
           end
         end
 
@@ -130,7 +144,7 @@ describe TmGrammar::Pass::MatchEvaluator do
           let(:type) { Match::Repetition::TYPE_ONE_OR_MORE }
 
           it 'returns the corresponding regular expression' do
-            evaluate(node).should == "((#{pattern.match})+)"
+            evaluate(node).should == "(?<#{rule}>(?:#{pattern.match})+)"
           end
         end
       end
@@ -148,13 +162,29 @@ describe TmGrammar::Pass::MatchEvaluator do
       end
 
       it "returns the pattern's match of the rule wrapped in a capture group" do
-        evaluate(node).should == "(#{pattern.match})"
+        evaluate(node).should == "(?<#{rule}>#{pattern.match})"
       end
 
       it 'adds a capture for the reference pattern' do
         evaluate(node)
-        patterns = containing_pattern.captures[1].patterns
+        patterns = containing_pattern.captures[rule].patterns
         patterns.first.include.should == "##{rule}"
+      end
+
+      context 'when the rule reference is not top level' do
+        let(:second_rule) { 'rule2' }
+
+        let(:referenced_pattern) do
+          Match::RuleReference.new(second_rule, containing_pattern)
+        end
+
+        before(:each) do
+          grammar.add_rule(second_rule, pattern)
+        end
+
+        it "groups the pattern's match of the rule in a non-capture group" do
+          evaluate(node).should == "(?<#{rule}>(?:#{pattern.match}))"
+        end
       end
     end
 

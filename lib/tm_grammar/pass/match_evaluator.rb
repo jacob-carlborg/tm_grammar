@@ -1,5 +1,6 @@
 module TmGrammar
   module Pass
+    # rubocop:disable Metrics/ClassLength
     class MatchEvaluator
       using PatternMatch
 
@@ -25,23 +26,57 @@ module TmGrammar
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/MethodLength
       # rubocop:disable Style/LambdaCall
-      def evaluate(node)
+      def evaluate(node, top_level_ref = false)
         match(node) do
-          with(Match::And.(left, right)) { evaluate_and(left, right) }
-          with(Match::Capture.(n)) { evaluate_capture(n) }
-          with(Match::Group.(n)) { evaluate_group(n) }
-          with(Match::Or.(left, right)) { evaluate_or(left, right) }
-          with(Match::Term.(value)) { evaluate_term(value) }
-          with(Match::Repetition.(n, ZERO_OR_ONE)) { evaluate_zero_or_one(n) }
-          with(Match::Repetition.(n, ZERO_OR_MORE)) { evaluate_zero_or_more(n) }
-          with(Match::Repetition.(n, ONE_OR_MORE)) { evaluate_one_or_more(n) }
-
-          with(Match::RuleReference.(rule, containing_pattern, ref_pattern)) do
-            evaluate_rule_reference(rule, containing_pattern, ref_pattern)
+          with(Match::And.(left, right)) do
+            evaluate_and(left, right, top_level_ref)
           end
 
-          with(TmGrammar::Node::Pattern) { evaluate_pattern(node) }
-          with(TmGrammar::Match) { evaluate(node.evaluate) }
+          with(Match::Capture.(n)) do
+            evaluate_capture(n, top_level_ref)
+          end
+
+          with(Match::Capture.(n, name)) do
+            evaluate_named_capture(n, name, top_level_ref)
+          end
+
+          with(Match::Group.(n)) do
+            evaluate_group(n, top_level_ref)
+          end
+
+          with(Match::Or.(left, right)) do
+            evaluate_or(left, right, top_level_ref)
+          end
+
+          with(Match::Term.(value)) do
+            evaluate_term(value)
+          end
+
+          with(Match::Repetition.(n, ZERO_OR_ONE)) do
+            evaluate_zero_or_one(n, top_level_ref)
+          end
+
+          with(Match::Repetition.(n, ZERO_OR_MORE)) do
+            evaluate_zero_or_more(n, top_level_ref)
+          end
+
+          with(Match::Repetition.(n, ONE_OR_MORE)) do
+            evaluate_one_or_more(n, top_level_ref)
+          end
+
+          with(Match::RuleReference.(rule, containing_pattern, ref_pattern)) do
+            evaluate_rule_reference(
+              rule, containing_pattern, ref_pattern, top_level_ref
+            )
+          end
+
+          with(TmGrammar::Node::Pattern) do
+            evaluate_pattern(node, top_level_ref)
+          end
+
+          with(TmGrammar::Match) do
+            evaluate(node.evaluate(top_level_ref))
+          end
 
           with(String) { evaluate_string(node) }
           with(Regexp) { evaluate_regexp(node) }
@@ -54,41 +89,49 @@ module TmGrammar
 
       private
 
-      def evaluate_and(left, right)
-        evaluate(left) + evaluate(right)
+      def evaluate_and(left, right, top_level_ref)
+        evaluate(left, top_level_ref) + evaluate(right, top_level_ref)
       end
 
-      def evaluate_capture(node)
-        node = evaluate(node)
-        "(#{node})"
+      def evaluate_capture(node, top_level_ref)
+        node = evaluate(node, top_level_ref)
+        top_level_ref ? evaluate(group(node)) : "(#{node})"
       end
 
-      def evaluate_group(node)
-        node = evaluate(node)
+      def evaluate_named_capture(node, name, top_level_ref)
+        node = evaluate(node, top_level_ref)
+        top_level_ref ? evaluate(group(node)) : "(?<#{name}>#{node})"
+      end
+
+      def evaluate_group(node, top_level_ref)
+        node = evaluate(node, top_level_ref)
         "(?:#{node})"
       end
 
-      def evaluate_or(left, right)
-        left = evaluate(left)
-        right = evaluate(right)
+      def evaluate_or(left, right, top_level_ref)
+        left = evaluate(left, top_level_ref)
+        right = evaluate(right, top_level_ref)
         "(?:#{left}|#{right})"
       end
 
-      def evaluate_pattern(pattern)
-        evaluate(pattern.match)
+      def evaluate_pattern(pattern, top_level_ref)
+        evaluate(pattern.match, top_level_ref)
       end
 
       def evaluate_regexp(regexp)
         regexp.source
       end
 
-      def evaluate_rule_reference(rule, containing_pattern, referenced_pattern)
+      def evaluate_rule_reference(rule, containing_pattern, referenced_pattern,
+        top_level_ref)
+
         block = -> { pattern { include "##{rule}" } }
         capture = TmGrammar::Capture.new(containing_pattern.grammar, nil, block)
-        containing_pattern.add_capture(
-          containing_pattern.new_capture_number, capture.evaluate
-        )
-        evaluate(Match::Capture.new(evaluate(referenced_pattern)))
+        containing_pattern.add_capture(rule, capture.evaluate)
+
+        pattern = evaluate(referenced_pattern, true)
+        node = top_level_ref ? group(pattern) : capture(pattern, rule)
+        evaluate(node, top_level_ref)
       end
 
       def evaluate_string(string)
@@ -99,34 +142,37 @@ module TmGrammar
         evaluate(value)
       end
 
-      def evaluate_zero_or_one(node)
-        evaluate(group(node)) + '?'
+      def evaluate_zero_or_one(node, top_level_ref)
+        evaluate(group(node), top_level_ref) + '?'
       end
 
-      def evaluate_zero_or_more(node)
-        evaluate_repetition(node, '*')
+      def evaluate_zero_or_more(node, top_level_ref)
+        evaluate_repetition(node, '*', top_level_ref)
       end
 
-      def evaluate_one_or_more(node)
-        evaluate_repetition(node, '+')
+      def evaluate_one_or_more(node, top_level_ref)
+        evaluate_repetition(node, '+', top_level_ref)
       end
 
-      def evaluate_repetition(node, suffix)
+      def evaluate_repetition(node, suffix, top_level_ref)
         if node.is_a?(Match::RuleReference)
-          node = evaluate(node)
-          evaluate(capture(node + suffix))
+          pattern = Match::And.new(group(node.referenced_pattern), suffix)
+          evaluate_rule_reference(
+            node.rule, node.containing_pattern, pattern, top_level_ref
+          )
         else
-          evaluate(group(node)) + suffix
+          evaluate(group(node), top_level_ref) + suffix
         end
       end
 
-      def capture(node)
-        Match::Capture.new(node)
+      def capture(node, name = nil)
+        Match::Capture.new(node, name)
       end
 
       def group(node)
         Match::Group.new(node)
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
