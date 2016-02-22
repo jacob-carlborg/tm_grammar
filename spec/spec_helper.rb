@@ -2,6 +2,7 @@ require 'pry'
 require 'rspec/its'
 
 require 'tm_grammar'
+require 'tm_grammar/rspec'
 
 RSpec.configure do |config|
   config.order = :random
