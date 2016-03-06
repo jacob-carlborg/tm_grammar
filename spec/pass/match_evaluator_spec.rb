@@ -51,6 +51,15 @@ describe TmGrammar::Pass::MatchEvaluator do
         evaluate(node).should == "(#{inner_node})"
       end
 
+      context 'named capture' do
+        let(:name) { :bar }
+        let(:node) { Match::Capture.new(inner_node, name) }
+
+        it 'groups the node in a named capture group' do
+          evaluate(node).should == "(?<#{name}>#{inner_node})"
+        end
+      end
+
       context 'when the node is part of a reference node' do
         it 'groups the node in a non-capture group' do
           evaluate(node, true).should == "(?:#{inner_node})"

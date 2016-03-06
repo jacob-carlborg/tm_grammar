@@ -583,5 +583,32 @@ describe TmGrammar::Dsl do
         subject.one_or_more(node).type.should == type
       end
     end
+
+    describe 'capture' do
+      let(:node) { 'foo' }
+
+      it 'returns a Capture match node' do
+        type = TmGrammar::Node::Match::Capture
+        subject.capture(node).should be_a(type)
+      end
+
+      context 'named capture' do
+        it 'returns a Capture match node' do
+          type = TmGrammar::Node::Match::Capture
+          subject.capture(:foo, node).should be_a(type)
+        end
+
+        it 'correctly sets the node' do
+          capture = subject.capture(:foo, node)
+          capture.node.should == node
+        end
+
+        it 'correctly sets the name' do
+          name = :foo
+          capture = subject.capture(name, node)
+          capture.name.should == name
+        end
+      end
+    end
   end
 end

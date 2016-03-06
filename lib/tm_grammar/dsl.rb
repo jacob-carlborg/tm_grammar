@@ -652,6 +652,14 @@ module TmGrammar
       def one_or_more(node)
         Match::Repetition.new(node, Match::Repetition::TYPE_ONE_OR_MORE)
       end
+
+      def capture(name_or_node, node = nil)
+        if node
+          Match::Capture.new(node, name_or_node)
+        else
+          Match::Capture.new(name_or_node)
+        end
+      end
     end
   end
 end
