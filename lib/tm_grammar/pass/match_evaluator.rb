@@ -70,6 +70,10 @@ module TmGrammar
             )
           end
 
+          with(Match::WordBoundary.(n)) do
+            evaluate_word_boundary(n, top_level_ref)
+          end
+
           with(TmGrammar::Node::Pattern) do
             evaluate_pattern(node, top_level_ref)
           end
@@ -163,6 +167,11 @@ module TmGrammar
         else
           evaluate(group(node), top_level_ref) + suffix
         end
+      end
+
+      def evaluate_word_boundary(asd, top_level_ref)
+        asdd = evaluate(asd, top_level_ref)
+        "\\b#{asdd}\\b"
       end
 
       def capture(node, name = nil)

@@ -610,5 +610,57 @@ describe TmGrammar::Dsl do
         end
       end
     end
+
+    describe 'word_boundary' do
+      let(:value) { 'foo' }
+
+      it 'returns a WordBoundary match node' do
+        type = TmGrammar::Node::Match::WordBoundary
+        subject.word_boundary(value).should be_a(type)
+      end
+
+      it 'returns a Group match node wrapped in a WordBoundary match node' do
+        type = TmGrammar::Node::Match::Group
+        subject.word_boundary(value).node.should be_a(type)
+      end
+
+      context 'when the value is a hash' do
+        let(:node) { 'bar' }
+        let(:name) { :foo }
+        let(:value) { { name => node } }
+
+        it 'returns a Capture match node wrapped in a WordBoundary match ' \
+          'node' do
+          type = TmGrammar::Node::Match::Capture
+          subject.word_boundary(value).node.should be_a(type)
+        end
+
+        it 'correctly sets the node' do
+          subject.word_boundary(value).node.node.should == node
+        end
+
+        it 'correctly sets the name' do
+          subject.word_boundary(value).node.name.should == name
+        end
+      end
+
+      context 'when the value is a symbol' do
+        let(:value) { :foo }
+
+        it 'returns a Capture match node wrapped in a WordBoundary match ' \
+          'node' do
+          type = TmGrammar::Node::Match::Capture
+          subject.word_boundary(value).node.should be_a(type)
+        end
+
+        it 'sets the value as the node' do
+          subject.word_boundary(value).node.node.should == value.to_s
+        end
+
+        it 'sets the value as the name' do
+          subject.word_boundary(value).node.name.should == value.to_s
+        end
+      end
+    end
   end
 end

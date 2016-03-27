@@ -50,6 +50,7 @@ module TmGrammar
       autoload :Repetition, 'tm_grammar/node/match/repetition'
       autoload :RuleReference, 'tm_grammar/node/match/rule_reference'
       autoload :Term, 'tm_grammar/node/match/term'
+      autoload :WordBoundary, 'tm_grammar/node/match/word_boundary'
     end
   end
 

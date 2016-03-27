@@ -660,6 +660,17 @@ module TmGrammar
           Match::Capture.new(name_or_node)
         end
       end
+
+      def word_boundary(value)
+        if value.is_a?(Hash)
+          Match::WordBoundary.new(capture(*value.first))
+        elsif value.is_a?(Symbol)
+          value = value.to_s
+          Match::WordBoundary.new(capture(value, value))
+        else
+          Match::WordBoundary.new(Match::Group.new(value))
+        end
+      end
     end
   end
 end

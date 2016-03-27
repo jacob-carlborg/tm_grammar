@@ -228,4 +228,13 @@ describe TmGrammar::Pass::MatchEvaluator do
       end
     end
   end
+
+  context 'when the node is a WordBoundary node' do
+    let(:value) { 'foo' }
+    let(:node) { Match::WordBoundary.new(value) }
+
+    it 'returns value of the term node' do
+      evaluate(node).should == "\\b#{value}\\b"
+    end
+  end
 end
